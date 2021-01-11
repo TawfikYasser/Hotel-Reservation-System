@@ -1,0 +1,192 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.Properties;
+import java.util.Random;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ *
+ * @author tawfe
+ */
+@WebServlet(urlPatterns = {"/signupValidation"})
+public class signupValidation extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        //HttpSession session = request.getSession(true);
+        try {
+            String username = request.getParameter("username");
+            String diaplayname = request.getParameter("displayname");
+            String email = request.getParameter("email");
+            String phonenumber = request.getParameter("phone");
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db";
+            String user = "root";
+            String password = "troot";
+            Connection connection = null;
+            Statement statement = null;
+            connection = (Connection) DriverManager.getConnection(url, user, password);
+            statement = (Statement) connection.createStatement();
+            String query = "SELECT * FROM user";
+            ResultSet resultSet = null;
+            resultSet = statement.executeQuery(query);
+            boolean flag = true;
+            while (resultSet.next()) {
+                if (resultSet.getString("email").equalsIgnoreCase(email)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                //User not found
+
+                String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+                String specialCharacters = "!@#$";
+                String numbers = "1234567890";
+                String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+                Random random = new Random();
+                char[] passwordc = new char[8];
+
+                passwordc[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+                passwordc[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+                passwordc[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+                passwordc[3] = numbers.charAt(random.nextInt(numbers.length()));
+
+                for (int i = 4; i < 8; i++) {
+                    passwordc[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+                }
+
+                String role = "client";
+                String query2 = "INSERT INTO user(username, email, password, display_name, phone_number, role) VALUES("
+                        + "'" + username + "',"
+                        + "'" + email + "',"
+                        + "'" + String.valueOf(passwordc) + "',"
+                        + "'" + diaplayname + "',"
+                        + "'" + phonenumber + "',"
+                        + "'" + role + "')";
+                int queryResult = statement.executeUpdate(query2);
+
+//                session.setAttribute("session_username", username);
+//                session.setAttribute("session_email", email);
+//                session.setAttribute("session_displayname", diaplayname);
+//                session.setAttribute("session_password", String.valueOf(passwordc));
+//                session.setAttribute("session_phonenumber", phonenumber);
+//                session.setAttribute("session_role", role);
+
+//                    String to = "alamirhassan8@gmail.com";//change accordingly  
+//                    String from = "tawfekyassertawfek@gmail.com";
+//                    String host = "localhost:6546";//or IP address  
+//
+//                    //Get the session object  
+//                    Properties properties = System.getProperties();
+//                    properties.setProperty("mail.smtp.host", host);
+//                    Session session = Session.getDefaultInstance(properties);
+//
+//                    //compose the message  
+//                    try {
+//                        MimeMessage message = new MimeMessage(session);
+//                        message.setFrom(new InternetAddress(from));
+//                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+//                        message.setSubject("Ping");
+//                        message.setText("Hello, this is example of sending email  ");
+//
+//                        // Send message  
+//                        Transport.send(message);
+//                        System.out.println("message sent successfully....");
+//
+//                    } catch (MessagingException mex) {
+//                        mex.printStackTrace();
+//                        out.println(mex);
+//                    }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
+                dispatcher.forward(request, response);
+
+            } else {
+                //User not found
+                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
+                dispatcher.forward(request, response);
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('User already exists!');");
+                out.println("</script>");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            out.println(e);
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

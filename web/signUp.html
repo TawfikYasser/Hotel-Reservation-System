@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Sign Up</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Roboto:wght@100&display=swap" rel="stylesheet">
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box
+            }
+            body{
+                min-height: 100vh;
+                background: #eee;
+                display: flex;
+                font-family: 'Nunito', sans-serif;
+            }
+            .container{
+                margin: auto;
+                width: 500px;
+                max-width: 90%
+            }
+            .container h1{
+                text-align: center;
+                margin: 50px;
+                font-family: 'Nunito', sans-serif;
+            }
+            .container form{
+                width: 100%;
+                height: 100%;
+                padding: 20px;
+                background: white;
+                border-radius: 1px;
+                box-shadow: 0 8px 16px rgba(0,0,0,.3);
+                padding-top: 50px;
+                padding-right: 50px;
+                padding-left: 50px;
+                padding-bottom: 50px;
+            }
+            .container form .form-control{
+                width: 100%;
+                height: 50px;
+                color: black;
+                background: #EAEAEA;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin: 0px 0 25px 0;
+                padding: 0 10px;
+                font-family: 'Nunito', sans-serif;
+            }
+            .container form .btn{
+                margin-left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                height: 50px;
+                border: none;
+                outline: none;
+                background: #27a327;
+                cursor: pointer;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: white;
+                border-radius: 1px;
+                transition: .3s;
+                font-family: 'Nunito', sans-serif;
+            }
+            .container form .btn:hover{
+                opacity: .7;
+            }
+            .h1{
+                text-align: center;
+                margin-bottom: 24px;
+                margin: auto;
+                color: #222;
+                font-family: 'Nunito', sans-serif;
+            }
+            ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: #B8B8B8;
+                opacity: 1; /* Firefox */
+            }
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+        <script>
+
+            function checkForm(form)
+            {
+                if (form.username.value === "") {
+                    var userName = document.getElementById("usernameError");
+                    userName.innerHTML = "   Error: Username cannot be blank!";
+                    //document.getElementById("usernameError").innerHTML="   Error: Username cannot be blank!";
+                    userName.style.color = "red";
+                    form.username.focus();
+                    return false;
+                }
+                if (form.displayname.value === "") {
+                    var displayName = document.getElementById("displaynameError");
+                    displayName.innerHTML = "   Error: Display Name cannot be blank!";
+                    //document.getElementById("usernameError").innerHTML="   Error: Username cannot be blank!";
+                    displayName.style.color = "red";
+                    form.displayname.focus();
+                    return false;
+                }
+                if (form.email.value === "") {
+                    var Email = document.getElementById("emailError");
+                    Email.innerHTML = "   Error: Email cannot be blank!";
+                    //document.getElementById("usernameError").innerHTML="   Error: Username cannot be blank!";
+                    Email.style.color = "red";
+                    form.email.focus();
+                    return false;
+                }
+                if (form.phone.value === "") {
+                    var Phone = document.getElementById("phoneError");
+                    Phone.innerHTML = "   Error: Phone Number cannot be blank!";
+                    //document.getElementById("usernameError").innerHTML="   Error: Username cannot be blank!";
+                    Phone.style.color = "red";
+                    form.phone.focus();
+                    return false;
+                }
+            }
+            function myFunction(elem) {
+                if (elem.name === "username") {
+                    document.getElementById("usernameError").innerHTML = "";
+                }
+                if (elem.name === "displayname") {
+                    document.getElementById("displaynameError").innerHTML = "";
+                }
+                if (elem.name === "email") {
+                    document.getElementById("emailError").innerHTML = "";
+                }
+                if (elem.name === "phone") {
+                    document.getElementById("phoneError").innerHTML = "";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <img src="hotelicon.png" alt="Banking System" width="100" height="100" class="center">
+            <h1>Create a new account</h1>
+            <form onsubmit= "return checkForm(this);" action="signupValidation">    
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" placeholder="Username" onchange="myFunction(this)">
+                    <label id="usernameError"></label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="displayname" placeholder="Display Name" onchange="myFunction(this)">
+                    <label id="displaynameError"></label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="email" placeholder="Email Address" onchange="myFunction(this)">
+                    <label id="emailError"></label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="phone" placeholder="Phone Number" onchange="myFunction(this)">
+                    <label id="phoneError"></label>
+                </div>
+                <input type="submit" class="btn" value="Sign Up">
+            </form>
+        </div>
+    </body>
+</html>
