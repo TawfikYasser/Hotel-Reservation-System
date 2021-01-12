@@ -25,7 +25,7 @@
     String displayname = "";
     String phonenumber = "";
     String role = "";
-
+    int user_Id = 0;
     Class.forName("com.mysql.jdbc.Driver");
     String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
     String user = "root";
@@ -43,11 +43,13 @@
             displayname = resultSet.getString("display_name");
             phonenumber = resultSet.getString("phone_number");
             role = resultSet.getString("role");
+            user_Id = resultSet.getInt("user_id");
         }
     }
 %>
 <html>
     <head>
+        <script src="jquery-3.5.1.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Roboto:wght@100&display=swap" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="icon" href="hotelicon.png">
@@ -64,7 +66,7 @@
                 font-family: 'Nunito', sans-serif;
             }
             nav{
-                background: #1b1b1b;
+                background: #ffffff;
                 box-shadow: 5px 5px 18px #888888;
             }
             nav:after{
@@ -74,7 +76,7 @@
             }
             nav .logo{
                 float: left;
-                color: #27a327;
+                color: navy;
                 font-size: 27px;
                 font-weight: 600;
                 line-height: 70px;
@@ -82,7 +84,7 @@
             }
             nav .cname{
                 float: left;
-                color: white;
+                color: navy;
                 font-size: 18px;
                 font-weight: 600;
                 line-height: 70px;
@@ -97,11 +99,11 @@
             nav ul li{
                 float: left;
                 display: inline-block;
-                background: #1b1b1b;
+                background: #ffffff;
                 margin: 0 5px;
             }
             nav ul li a{
-                color: white;
+                color: navy;
                 text-decoration: none;
                 line-height: 70px;
                 font-size: 16px;
@@ -109,20 +111,20 @@
                 text-transform: uppercase;
             }
             nav ul li a:hover{
-                color: #27a327;
+                color: rgba(0,242,254,.8);
                 border-radius: 5px;
             }
             nav .logout:hover{
-                box-shadow: 0 0 5px #27a327, 0 0 5px #27a327;
+                box-shadow: 0 0 5px rgba(0,242,254,.8), 0 0 5px rgba(0,242,254,.8);
             }
             nav ul ul li a:hover{
-                color: #27a327;
+                color: rgba(79,172,254,.8);
                 box-shadow: none;
             }
             nav ul ul{
                 position: absolute;
                 top: 90px;
-                border-top: 3px solid #27a327;
+                border-top: 3px solid rgba(0,242,254,.8);
                 opacity: 0;
                 visibility: hidden;
                 transition: top .3s;
@@ -155,7 +157,7 @@
                 font-family: 'Nunito', sans-serif;
             }
             .search_container .btn-search{
-                background: #27a327;
+                background: linear-gradient(to right,rgba(79,172,254,.8),rgba(0,242,254,.8));
                 cursor: pointer;
                 border-radius: 1px;
                 box-shadow: 0 8px 16px rgba(0,0,0,.3);
@@ -195,6 +197,36 @@
                 padding: 0 30px;
                 font-family: 'Nunito', sans-serif;
             }
+            .form_group_search{
+                text-align: center;
+                width: 100%;
+                height: 50px;
+                color: black;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin-top: 15px;
+                font-family: 'Nunito', sans-serif;
+            }
+            .form_g_text{
+                text-align: center;
+                width: 100%;
+                height: 50px;
+                color: black;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin-top: 15px;
+                font-family: 'Nunito', sans-serif;
+            }
+            .filter_box{
+                text-align: center;
+                width: 100%;
+                height: 50px;
+                color: black;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin-top: 15px;
+                font-family: 'Nunito', sans-serif; 
+            }
             .city-menu{
                 padding: 8px 12px;
                 color: #333333;
@@ -202,6 +234,18 @@
                 height: 80%;
                 text-align: center;
                 background-color: #eee;
+                border: 1px solid #dddddd;
+                cursor: pointer;
+                border-radius: 1px;
+            }
+            .menu_star_filter{
+                padding: 8px 50px;
+                color: #333333;
+                width: 50%;
+                height: 80%;
+                box-shadow:2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2); 
+                text-align: center;
+                background-color: #fff;
                 border: 1px solid #dddddd;
                 cursor: pointer;
                 border-radius: 1px;
@@ -214,6 +258,152 @@
             .city-menu option{
                 background: #ffffff;
             }
+            table {
+                border-collapse: collapse;
+                width: 800px;
+                height: 200px;
+                margin: auto;
+                margin-top: 80px;
+                padding-top: 30px;
+                padding-bottom: 30px;
+                border: 1px solid #bdc3c7;
+                box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            tr {
+                transition: all .2s ease-in;
+                cursor: auto;
+                background-color: #fff
+            }
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+                color: black;
+                border-bottom: 1px solid #ddd;
+            }
+
+            #header {
+                background-color: white;
+                color: white;
+            }
+            /*            tr:hover {
+                            background-color: #C1FDC5;
+                            transform: scale(1.02);
+                            color: white;
+                            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+                        }*/
+
+            @media only screen and (max-width: 768px) {
+                table {
+                    width: 100%;
+                }
+            }
+            section{
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: -400px;
+
+            }
+            .card{
+                background-color: #fff;
+                box-shadow: 0 0 0.9375em rgba(0,0,0,0.219);
+                width: 800px;
+                margin-top: -400px;
+                border-radius: 4px;
+                display: flex;
+            }
+            .card:hover{
+                background: linear-gradient(to right,rgba(79,172,254,.8),rgba(0,242,254,.8));
+                color: navy;
+                transform: scale(1.02);
+                box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+            }
+            .card__hero{
+                flex: 0 0 50%;
+                position: relative;
+            }
+            .card__content{
+                flex: 1;
+                padding: 35px 35px 25px 35px;
+                display: flex;
+                flex-direction: column;
+            }
+            .card__img{
+                display: block;
+                width: 100%;
+            }
+            .card__middle{
+                position: absolute;
+                top:85%;
+                left:50%;
+                transform: translate(-50%,-50%);
+            }
+            .card__middle-text{
+                background-color: #fff;
+                font-size: 13.5px;
+                font-weight: 400;
+                border-radius: 2px;
+                padding: 10px 22px;
+                box-shadow: 0 0 0.9375em rgba(0,0,0,0.219);
+            }
+            .card__info{
+                display: flex;
+                flex-direction: column;
+
+                margin-bottom: auto;
+            }
+            .card__price{
+                font-weight: 500;
+                letter-spacing: 1px;
+                font-size: 22px;
+                margin-bottom: 8px;
+            }
+            .card__address{
+                font-size: 14px;
+                font-weight: 300;
+                margin-bottom: 8px;
+            }
+            .card__details{
+                font-size: 12.5px;
+                font-weight: 400;
+            }
+            .card__buttons{
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .card__btn{
+                text-transform: uppercase;
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: 500;
+                color: navy;
+
+                padding-bottom: 2px;
+                border-bottom: 1px solid transparent;
+                transition:  border-bottom .4s;
+            }
+            .card__btn:hover{
+                border-bottom: 1px solid navy;
+                color: navy;
+            }
+            .card__btn:not(:last-child){
+                margin-right: 10px;
+            }
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                padding: 30px;
+                width: 100%;
+                background-color: white;
+                color: navy;
+                text-align: center;
+            }
+
         </style>
     </head>
     <body>
@@ -221,7 +411,7 @@
             <div class="logo">Hotel System</div>
             <div class="cname">Welcome: <%=displayname%></div>
             <ul>
-                <li><a href="profile.jsp">Profile</a></li>
+                <li><a href="userProfile.jsp?id=<%= user_Id%>">Profile</a></li>
                 <li>
                     <a href="#">Features</a>
                     <ul>
@@ -261,12 +451,12 @@
                             statement = null;
                             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
                             statement = (Statement) connection.createStatement();
-                            query = "SELECT * FROM hotel";
+                            query = "SELECT DISTINCT hotel_city FROM hotel";
                             resultSet = null;
                             resultSet = statement.executeQuery(query);
                             while (resultSet.next()) {
                         %>
-                        <option value="<%=resultSet.getString("hotel_location")%>"><%=resultSet.getString("hotel_location")%></option>
+                        <option value="<%=resultSet.getString("hotel_city")%>"><%=resultSet.getString("hotel_city")%></option>
                         <%
                             }
                         %>
@@ -308,13 +498,58 @@
                     </select>
                 </div>
                 <br>
-                <div class="form_group">
-                    <div id="txtHint">Data</div>
-                </div>
+
             </form>
             <div class="form_group">
                 <button type="button" class="btn-search" id="sub" onclick="searchHotels()">Submit</button>
             </div>
+        </div>
+        <div class="form_g_text">
+            <div id="searchResult" style="font-size: 25px;"></div>
+        </div>
+        <div class="filter_box" hidden>
+            <select id="selectStar" class="menu_star_filter"  name="starList" onchange="filterStar(this.value)" data-dropdown>
+                <option value="" disabled selected>Filter by stars</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <select id="selectStar" class="menu_star_filter"  name="starList" onchange="filterOther(this.value)" data-dropdown>
+                <option value="" disabled selected>Other filters</option>
+                <option value="rate">By Rate (Highest First)</option>
+                <option value="price">By Price (Lowest First)</option>
+                <option value="distance">By Distance (Nearest First)</option>
+            </select>
+            <select id="selectMeal" class="menu_star_filter"  name="mealList" onchange="filterMeal(this.value)" data-dropdown>
+                <option value="" disabled selected>Filter by meals</option>
+                <%
+                    Class.forName("com.mysql.jdbc.Driver");
+                    url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
+                    user = "root";
+                    passworddb = "troot";
+                    connection = null;
+                    statement = null;
+                    connection = (Connection) DriverManager.getConnection(url, user, passworddb);
+                    statement = (Statement) connection.createStatement();
+                    query = "SELECT DISTINCT meal_name FROM meals";
+                    resultSet = null;
+                    resultSet = statement.executeQuery(query);
+                    while (resultSet.next()) {
+                %>
+                <option value="<%=resultSet.getString("meal_name")%>"><%=resultSet.getString("meal_name")%></option>
+                <%
+                    }
+                %>
+            </select>
+        </div>
+
+        <div class="form_group_search">
+
+        </div>
+        <div class="footer">
+            <p>Made with ❤ By Al-Amir Hassan & Tawfik Yasser</p>
         </div>
     </body>
 </html>

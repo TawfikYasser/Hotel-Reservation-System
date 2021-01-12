@@ -18,6 +18,12 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Properties;
 import java.util.Random;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -110,7 +116,7 @@ public class signupValidation extends HttpServlet {
 
 //                    String to = "alamirhassan8@gmail.com";//change accordingly  
 //                    String from = "tawfekyassertawfek@gmail.com";
-//                    String host = "localhost:6546";//or IP address  
+//                    String host = "localhost:3305";//or IP address  
 //
 //                    //Get the session object  
 //                    Properties properties = System.getProperties();
