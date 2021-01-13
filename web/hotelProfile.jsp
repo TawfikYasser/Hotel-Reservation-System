@@ -38,6 +38,7 @@
     String hotel_min_price = "";
     String hotel_max_price = "";
     String hotel_availability = "";
+    String userId ="";
     ArrayList<String> hotel_photos = new ArrayList<>();
 
     while (resultSet.next()) {
@@ -80,6 +81,7 @@
     while (resultSet.next()) {
         for (int i = 0; i < rUserId.size(); i++) {
             if (resultSet.getInt("user_id") == rUserId.get(i)) {
+                userId = resultSet.getString("user_id");
                 rUserName.add(resultSet.getString("display_name"));
             }
         }
@@ -138,8 +140,10 @@
         <script>
             var counter = 0;
             var arr = [];
+            var arr_room_ids = [];
+            var arr_no_rooms = [];
             var roomids = "";
-            var riValue ="";
+            var noroom = "";
             function checkDates(element)
             {
                    var currentDate = new Date();
@@ -164,11 +168,28 @@
             
             
             function checkAvilability(element,index,room_id){
-                alert(room_id);
-                roomids += room_id.toString();
-                roomids +=",";
-                alert(roomids);
-                var selectedValue = document.getElementById("room-menu").value;
+                var selectedValue = document.getElementById("room-menu").value;//selected value for each room
+                //Adding the ids to the array
+                var flag =0;
+                var position;
+                var valueFlag = false;
+                for(var i =0;i<arr_room_ids.length;i++){
+                    if(arr_room_ids[i] !== room_id){
+                        flag++;
+                    }else{
+                        position = i;
+                        valueFlag = true;
+                    }
+                }
+                if(flag === arr_room_ids.length){
+                    arr_room_ids.push(room_id);
+                }
+                if(!valueFlag){
+                    arr_no_rooms.push(element.value);
+                }else{
+                    arr_no_rooms[position] = element.value;
+                }
+
                 if(selectedValue===""){
                     alert("Please choose a room number from above first!");
                 }else{
@@ -195,10 +216,21 @@
                         alert("You must choose "+selectedValue+" rooms.");
                         return false;
                 }else{
+                    for(var i =0;i<arr_room_ids.length;i++){
+                        roomids+=arr_room_ids[i];
+                        roomids+=",";
+                        noroom+= arr_no_rooms[i];
+                        noroom+=",";
+                    }
+                    var c_in = document.getElementById("checkindate").value;
+                    var c_out = document.getElementById("checkoutdate").value;
+                    var nights_v = (new Date(c_out).getDate()) - (new Date(c_in).getDate()); 
                     document.getElementById("vAdults").value = document.getElementById("adults-menu").value;
                     document.getElementById("vChildren").value = document.getElementById("children-menu").value;
                     document.getElementById("vNumberOfRooms").value = document.getElementById("room-menu").value;
                     document.getElementById("vRoomId").value = roomids;
+                    document.getElementById("vRoomNos").value = noroom;
+                    document.getElementById("vNights").value = nights_v;
                     return true;
                 }
             }
@@ -642,12 +674,12 @@
                 <div class="form_group">
                     <label>Check In</label>
                     <br>
-                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)"/>
+                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)" />
                 </div>
                 <div class="form_group">
                     <label>Check Out</label>
                     <br>
-                    <input class="city-menu" type="date" name="checkoutdate" id="checkoutdate" onchange="checkDates(this)"/>
+                    <input class="city-menu" type="date" name="checkoutdate" id="checkoutdate" onchange="checkDates(this)" />
                 </div>
                 <div class="form_group">
                     <label>Number of Adults</label>
@@ -770,6 +802,10 @@
                      <input type="hidden" class="btn" id="vChildren" name="children">
                      <input type="hidden" class="btn" id="vNumberOfRooms" name="norooms">
                      <input type="hidden" class="btn" id="vRoomId" name="roomId">
+                     <input type="hidden" class="btn" id="vRoomNos" name="roomNo">
+                     <input type="hidden" class="btn" id="vHotelId" name="hotel_id" value='<%=hotel_id%>'>
+                     <input type="hidden" class="btn" id="vUserId" name="user_id" value='<%=userId%>'>
+                     <input type="hidden" class="btn" id="vNights" name="noNights">
                      </form>
         </div>
 
