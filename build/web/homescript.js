@@ -3,19 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-//JQuery
-//$(function(){
-//    $(".btn-search").click(function(event){
-//        //$("#city").hide();
-//    });
-//});
-
-
-function func(id) {
-    window.location.href = "userProfile.jsp?user_Id=" + id;
-}
-
 //Js
 function searchHotels() {
     var selectedCity = document.getElementById("city").value;
@@ -111,3 +98,4 @@ function filterMeal(meal) {
 
 
 }
+

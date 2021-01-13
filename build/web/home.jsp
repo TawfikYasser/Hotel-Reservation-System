@@ -409,9 +409,8 @@
     <body>
         <nav>
             <div class="logo">Hotel System</div>
-            <div class="cname">Welcome: <%=displayname%></div>
             <ul>
-                <li><a href="userProfile.jsp?id=<%= user_Id%>">Profile</a></li>
+                <li><a href="userProfile.jsp?id=<%= user_Id%>"><%=displayname%></a></li>
                 <li>
                     <a href="#">Features</a>
                     <ul>

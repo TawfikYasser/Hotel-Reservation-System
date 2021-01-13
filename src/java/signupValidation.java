@@ -18,10 +18,8 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Properties;
 import java.util.Random;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
@@ -58,7 +56,7 @@ public class signupValidation extends HttpServlet {
             String diaplayname = request.getParameter("displayname");
             String email = request.getParameter("email");
             String phonenumber = request.getParameter("phone");
-            
+
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db";
             String user = "root";
@@ -113,7 +111,6 @@ public class signupValidation extends HttpServlet {
 //                session.setAttribute("session_password", String.valueOf(passwordc));
 //                session.setAttribute("session_phonenumber", phonenumber);
 //                session.setAttribute("session_role", role);
-
 //                    String to = "alamirhassan8@gmail.com";//change accordingly  
 //                    String from = "tawfekyassertawfek@gmail.com";
 //                    String host = "localhost:3305";//or IP address  
@@ -139,6 +136,8 @@ public class signupValidation extends HttpServlet {
 //                        mex.printStackTrace();
 //                        out.println(mex);
 //                    }
+
+                Send_Mail(email,String.valueOf(passwordc),username);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
 
@@ -154,6 +153,54 @@ public class signupValidation extends HttpServlet {
             e.printStackTrace();
             out.println(e);
         }
+    }
+
+    public void Send_Mail(String email, String password, String username) throws MessagingException {
+        String USER_NAME = "tawfekyassertawfek@gmail.com";
+        String PASSWORD = "02k0181381t";
+        String RECIPIENT = email;
+
+        String from = USER_NAME;
+        String pass = PASSWORD;
+        String[] to = {RECIPIENT};
+        String subject = "Here are your confirm password";
+        String body = "welcome " + username + " your password is : " + password;
+
+        sendFromGMail(from, pass, to, subject, body);
+    }
+
+    private static void sendFromGMail(String from, String pass, String[] to, String subject, String body) throws AddressException, MessagingException {
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", pass);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        
+            message.setFrom(new InternetAddress(from));
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            for (int i = 0; i < to.length; i++) {
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+
+            for (InternetAddress toAddres : toAddress) {
+                message.addRecipient(Message.RecipientType.TO, toAddres);
+            }
+
+            message.setSubject(subject);
+            message.setText(body);
+            Transport transport;
+            transport = session.getTransport("smtp");
+            transport.connect(host, from, pass);
+            transport.sendMessage(message, message.getAllRecipients());
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

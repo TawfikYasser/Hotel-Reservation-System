@@ -56,75 +56,73 @@
             hotel_photos.add(resultSet2.getString("photo"));
         }
     }
-        ArrayList<String> rComments = new ArrayList<>();
-        ArrayList<String> rValues = new ArrayList<>();
-        ArrayList<Integer> rUserId = new ArrayList<>();
-        ArrayList<String> rUserName = new ArrayList<>();
-        
-        statement=null;
-        statement = (Statement) connection.createStatement();
-        query = "SELECT * FROM rate WHERE hotel_id ='"+hotel_id+"'";
-        resultSet = null;
-        resultSet = statement.executeQuery(query);
-        while(resultSet.next()){
-            rComments.add(resultSet.getString("comment"));
-            rValues.add(resultSet.getString("rate"));
-            rUserId.add(resultSet.getInt("user_id"));
-        }
-        
-        statement=null;
-        statement = (Statement) connection.createStatement();
-        query = "SELECT * FROM user";
-        resultSet = null;
-        resultSet = statement.executeQuery(query);
-        while(resultSet.next()){
-            for(int i =0;i<rUserId.size();i++){
-                if(resultSet.getInt("user_id") == rUserId.get(i)){
-                    rUserName.add(resultSet.getString("display_name"));
-                }
+    ArrayList<String> rComments = new ArrayList<>();
+    ArrayList<String> rValues = new ArrayList<>();
+    ArrayList<Integer> rUserId = new ArrayList<>();
+    ArrayList<String> rUserName = new ArrayList<>();
+
+    statement = null;
+    statement = (Statement) connection.createStatement();
+    query = "SELECT * FROM rate WHERE hotel_id ='" + hotel_id + "'";
+    resultSet = null;
+    resultSet = statement.executeQuery(query);
+    while (resultSet.next()) {
+        rComments.add(resultSet.getString("comment"));
+        rValues.add(resultSet.getString("rate"));
+        rUserId.add(resultSet.getInt("user_id"));
+    }
+
+    statement = null;
+    statement = (Statement) connection.createStatement();
+    query = "SELECT * FROM user";
+    resultSet = null;
+    resultSet = statement.executeQuery(query);
+    while (resultSet.next()) {
+        for (int i = 0; i < rUserId.size(); i++) {
+            if (resultSet.getInt("user_id") == rUserId.get(i)) {
+                rUserName.add(resultSet.getString("display_name"));
             }
-            
-        }
-        
-        statement=null;
-        statement = (Statement) connection.createStatement();
-        query = "SELECT * FROM meals WHERE hotel_id='"+hotel_id+"'";
-        resultSet = null;
-        resultSet = statement.executeQuery(query);
-        ArrayList<String> meals = new ArrayList<>();
-        ArrayList<String> meals_price = new ArrayList<>();
-        while(resultSet.next()){
-            meals.add(resultSet.getString("meal_name"));
-            meals_price.add(resultSet.getString("meal_price"));
-        }
-        
-
-        statement=null;
-        statement = (Statement) connection.createStatement();
-        query = "SELECT * FROM hotel_facilities WHERE hotel_id='"+hotel_id+"'";
-        resultSet = null;
-        resultSet = statement.executeQuery(query);
-        ArrayList<String> facilities = new ArrayList<>();
-        while(resultSet.next()){
-            facilities.add(resultSet.getString("hotel_facilities_name"));
         }
 
+    }
 
-        
+    statement = null;
+    statement = (Statement) connection.createStatement();
+    query = "SELECT * FROM meals WHERE hotel_id='" + hotel_id + "'";
+    resultSet = null;
+    resultSet = statement.executeQuery(query);
+    ArrayList<String> meals = new ArrayList<>();
+    ArrayList<String> meals_price = new ArrayList<>();
+    while (resultSet.next()) {
+        meals.add(resultSet.getString("meal_name"));
+        meals_price.add(resultSet.getString("meal_price"));
+    }
 
-        statement=null;
-        statement = (Statement) connection.createStatement();
-        query = "SELECT * FROM room WHERE hotel_id='"+hotel_id+"'";
-        resultSet = null;
-        resultSet = statement.executeQuery(query);
-        ArrayList<String> room_type = new ArrayList<>();
-        ArrayList<String> room_availability = new ArrayList<>();
-        ArrayList<String> room_price = new ArrayList<>();
-        while(resultSet.next()){
-            room_type.add(resultSet.getString("room_type"));
-            room_availability.add(resultSet.getString("room_availability"));
-            room_price.add(resultSet.getString("room_price"));
-        }
+    statement = null;
+    statement = (Statement) connection.createStatement();
+    query = "SELECT * FROM hotel_facilities WHERE hotel_id='" + hotel_id + "'";
+    resultSet = null;
+    resultSet = statement.executeQuery(query);
+    ArrayList<String> facilities = new ArrayList<>();
+    while (resultSet.next()) {
+        facilities.add(resultSet.getString("hotel_facilities_name"));
+    }
+
+    statement = null;
+    statement = (Statement) connection.createStatement();
+    query = "SELECT * FROM room WHERE hotel_id='" + hotel_id + "'";
+    resultSet = null;
+    resultSet = statement.executeQuery(query);
+    ArrayList<String> room_id = new ArrayList<>();
+    ArrayList<String> room_type = new ArrayList<>();
+    ArrayList<String> room_availability = new ArrayList<>();
+    ArrayList<String> room_price = new ArrayList<>();
+    while (resultSet.next()) {
+        room_id.add(String.valueOf(resultSet.getInt("room_id")));
+        room_type.add(resultSet.getString("room_type"));
+        room_availability.add(resultSet.getString("room_availability"));
+        room_price.add(resultSet.getString("room_price"));
+    }
 
 
 %>
@@ -137,6 +135,74 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="icon" href="hotelicon.png">
         <title><%=hotel_name%></title>
+        <script>
+            var counter = 0;
+            var arr = [];
+            var roomids = "";
+            var riValue ="";
+            function checkDates(element)
+            {
+                   var currentDate = new Date();
+                   if(element.name === "checkindate"){
+                       var inputDate = new Date(element.value);
+                       if(inputDate < currentDate){
+                           alert("Check in date in past");
+                       }else{
+                           document.getElementById("vCheckInDate").value = inputDate;
+                       }
+                   }
+                   if(element.name === "checkoutdate"){
+                    var inputDate = new Date(element.value);
+                    var checkin = new Date(document.getElementById("checkindate").value);
+                       if(inputDate < currentDate || inputDate < checkin){
+                           alert("Check out date in past or check out date is before check in date.");
+                       }else{
+                            document.getElementById("vCheckOutDate").value = inputDate;
+                       }
+                   }
+            }  
+            
+            
+            function checkAvilability(element,index,room_id){
+                alert(room_id);
+                roomids += room_id.toString();
+                roomids +=",";
+                alert(roomids);
+                var selectedValue = document.getElementById("room-menu").value;
+                if(selectedValue===""){
+                    alert("Please choose a room number from above first!");
+                }else{
+    
+                        counter = 0;
+                        arr[index] = Number(element.value);
+                        var i;
+                        for(i= 0 ; i < arr.length ;i++){
+                            if(isNaN(arr[i])){
+                                arr[i] = 0;
+                            }
+                            counter+= arr[i];
+                        }
+                        if(counter > Number(selectedValue)){
+                            alert("You must choose only "+selectedValue+" rooms.");
+                        } 
+                }
+            }
+            
+            function checkOnClick(){
+                
+                var selectedValue = document.getElementById("room-menu").value;
+                if(counter < Number(selectedValue)){
+                        alert("You must choose "+selectedValue+" rooms.");
+                        return false;
+                }else{
+                    document.getElementById("vAdults").value = document.getElementById("adults-menu").value;
+                    document.getElementById("vChildren").value = document.getElementById("children-menu").value;
+                    document.getElementById("vNumberOfRooms").value = document.getElementById("room-menu").value;
+                    document.getElementById("vRoomId").value = roomids;
+                    return true;
+                }
+            }
+        </script>
         <style>
             *{
                 margin: 0;
@@ -233,6 +299,7 @@
                 margin: 10px auto;
                 width: 100%;
                 max-width: 100%;
+                margin-bottom: 300px;
             }
             .profile-container .rate-card{
                 margin: 0px auto;
@@ -250,6 +317,25 @@
             .container-img{
                 position: relative;
 
+            }
+            .container-img .btn{
+                width: 20%;
+                height: 50px;
+                border: none;
+                margin-top: 100px;
+                outline: none;
+                background: linear-gradient(to right,rgba(79,172,254,.8),rgba(0,242,254,.8));
+                cursor: pointer;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: white;
+                border-radius: 1px;
+                transition: .3s;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-family: 'Nunito', sans-serif;
             }
             .center-hotel-name {
                 position: absolute;
@@ -304,9 +390,84 @@
                 padding: 0 30px;
                 font-family: 'Nunito', sans-serif;
             }
+            
             .hotel-info{
                 font-size: 25px;
             }
+            .profile-container .form_group{
+                text-align: center;
+                width: 100%;
+                height: 50px;
+                color: black;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin: 15px 0 10px 0;
+                padding: 0 30px;
+                font-family: 'Nunito', sans-serif;
+            }
+            .city-menu{
+                padding: 8px 12px;
+                color: #333333;
+                width: 50%;
+                height: 80%;
+                text-align: center;
+                background-color: #eee;
+                border: 1px solid #dddddd;
+                cursor: pointer;
+                border-radius: 1px;
+                
+            }
+            table, th, td {
+                border-collapse: collapse;
+                padding: 15px;
+                text-align: center;
+                
+            }
+
+            table.center {
+                margin-left: auto; 
+                margin-right: auto;
+                border-collapse: collapse;
+                border-radius: 5px 5px 0 0;
+                overflow: hidden;
+                font-size: 0.9em;
+                box-shadow: 0 0 20px rgba(0,0,0,0.15);
+                margin-bottom: 50px;
+            }
+            th{
+                background-color: #009879;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+            }
+            .center th,td{
+                padding: 12px 15px;
+            }
+            .center tbody,tr{
+                border-bottom: 1px solid #dddddd;
+            }
+            .center tbody tr:nth-of-type(even){
+                background-color: #f3f3f3;
+            }
+            .profile-container .btn{
+                margin-left: 50%;
+                transform: translateX(-50%);
+                width: 15%;
+                margin-bottom: 15px;
+                height: 50px;
+                border: none;
+                outline: none;
+                background: #009879;
+                cursor: pointer;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: white;
+                border-radius: 30px;
+                transition: .3s;
+                font-family: 'Nunito', sans-serif;
+            }
+           
+            
         </style>
     </head>
 
@@ -340,6 +501,10 @@
         <div class="container-img">
             <img class='hotel_img' src='<%=hotel_photos.get(0)%>'/>
             <div class="center-hotel-name"><b><%=hotel_name%></b></div>
+            
+                
+                <a href="#makeReserve"><input type="submit" class="btn" value="Reserve"></a>
+
         </div>
 
         <div class="profile-container">
@@ -358,43 +523,43 @@
                 <br>
                 <hr>
                 <div class="form_group">
-                    <label class="hotel-info">Hotel City: <b><%=hotel_city%><b></label>
-                </div>
-                <hr>
+                <label class="hotel-info">Hotel City: <b><%=hotel_city%><b></label>
+                            </div>
+                            <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Phone: <b><%=hotel_phone%><b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Stars: <b><%=hotel_stars%> stars<b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Distance: <b><%=hotel_distance%> km from center<b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Rating: <b><%=hotel_avg_rate%><b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Minimum Price: $<b><%=hotel_min_price%><b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Maximum Price: $<b><%=hotel_max_price%><b></label>
-                </div>
+                                </div>
                 <hr>
                 <div class="form_group">
                     <label class="hotel-info">Hotel Availability: <b><%=hotel_availability%><b></label>
-                </div>
-                <hr>
- 
+                                </div>
+                                <hr>
+
                 <div class="form_group">
                     <label class="hotel-info">Hotel Ratings</label>
                 </div>
-                
-                <%if(rUserName.size()>0){%>
+
+                <%if (rUserName.size() > 0) {%>
                 <%for (int i = 0; i < rUserName.size(); i++) {%>
                 <div class="rate-card">
                     <div class="w3-card-4" >
@@ -416,13 +581,13 @@
                 <%}%>
                 <%}%>
                 <hr>
-                
-                <%if(meals.size()>0){%>
+
+                <%if (meals.size() > 0) {%>
                 <div class="form_group">
                     <p class="hotel-info"><strong>Hotel Meals</strong></p>
                     <br>
-                    <%for(int i=0;i<meals.size();i++){%>
-                    <label class="hotel-info">*Meal <%=(i+1)%>*</label>
+                    <%for (int i = 0; i < meals.size(); i++) {%>
+                    <label class="hotel-info">*Meal <%=(i + 1)%>*</label>
                     <br>
                     <label class="hotel-info">Meal Name: <%=meals.get(i)%></label>
                     <br>
@@ -433,13 +598,13 @@
                 </div>
                 <%}%>
                 <hr>
-                
-                <%if(facilities.size()>0){%>
+
+                <%if (facilities.size() > 0) {%>
                 <div class="form_group">
                     <p class="hotel-info"><b>Most popular facilities</b></p>
                     <br>
-                    <%for(int i=0;i<facilities.size();i++){%>
-                    <label class="hotel-info">*Facility <%=(i+1)%>*</label>
+                    <%for (int i = 0; i < facilities.size(); i++) {%>
+                    <label class="hotel-info">*Facility <%=(i + 1)%>*</label>
                     <br>
                     <label class="hotel-info"><%=facilities.get(i)%></label>
                     <br>
@@ -447,14 +612,14 @@
                 </div>
                 <%}%>
                 <hr>
-                
-                <%if(room_type.size()>0){%>
+
+                <%if (room_type.size() > 0) {%>
                 <div class="form_group">
                     <p class="hotel-info"><b>Hotel Rooms</b></p>
                     <br>
-                    <%for(int i=0;i<room_type.size();i++){%>
+                    <%for (int i = 0; i < room_type.size(); i++) {%>
                     <br>
-                    <label class="hotel-info">*Room <%=(i+1)%>*</label>
+                    <label class="hotel-info">*Room <%=(i + 1)%>*</label>
                     <br>
                     <label class="hotel-info">Room Type: <%=room_type.get(i)%></label>
                     <br>
@@ -465,7 +630,147 @@
                     <%}%>
                 </div>
                 <%}%>
+
+                
+                 <hr>
+
+            
+            <div class="form_group">
+                <p class="hotel-info" id="makeReserve"><b>Make a reservation</b></p>
+                <br>
+                
+                <div class="form_group">
+                    <label>Check In</label>
+                    <br>
+                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)"/>
+                </div>
+                <div class="form_group">
+                    <label>Check Out</label>
+                    <br>
+                    <input class="city-menu" type="date" name="checkoutdate" id="checkoutdate" onchange="checkDates(this)"/>
+                </div>
+                <div class="form_group">
+                    <label>Number of Adults</label>
+                    <br>
+                    <select class="city-menu" id="adults-menu">
+                        <option value="" disabled selected>Number of adults</option>
+                        <option value="1" >1</option>
+                        <option value="2" >2</option>
+                        <option value="3" >3</option>
+                        <option value="4" >4</option>
+                        <option value="5" >5</option>
+                        <option value="1" >6</option>
+                        <option value="2" >7</option>
+                        <option value="3" >8</option>
+                        <option value="4" >9</option>
+                        <option value="5" >10</option>
+                    </select>
+                </div>
+                <div class="form_group">
+                    <label>Number of Children</label>
+                    <br>
+                    <select class="city-menu" id="children-menu">
+                        <option value="" disabled selected>Number of children</option>
+                        <option value="0" >0</option>
+                        <option value="1" >1</option>
+                        <option value="2" >2</option>
+                        <option value="3" >3</option>
+                        <option value="4" >4</option>
+                        <option value="5" >5</option>
+                        <option value="6" >6</option>
+                        <option value="7" >7</option>
+                        <option value="8" >8</option>
+                        <option value="9" >9</option>
+                        <option value="10" >10</option>
+                    </select>
+                </div>
+                <div class="form_group">
+                    <label>Number of Rooms</label>
+                    <br>
+                    <select class="city-menu" id="room-menu">
+                        <option value="" disabled selected>Number of rooms</option>
+                        <option value="1" >1</option>
+                        <option value="2" >2</option>
+                        <option value="3" >3</option>
+                        <option value="4" >4</option>
+                        <option value="5" >5</option>
+                        <option value="6" >6</option>
+                        <option value="7" >7</option>
+                        <option value="8" >8</option>
+                        <option value="9" >9</option>
+                        <option value="10" >10</option>
+                    </select>
+                </div>
+                <br>
+            </div>
+                 
+                 
+                 <div class="table-group">
+                     
+                     <table class="center">
+                         
+                         <tr>
+                             <th>Room #</th>
+                             <th>Room Type</th>
+                             <th>Room Price</th>
+                             <th>Room Availability</th>
+                             <th># Of Rooms</th>
+                         </tr>
+                         
+                         <%for(int i = 0 ;i <room_type.size();i++){%>
+                         <tr>
+                             <td><%=room_id.get(i)%></td> 
+                             <td><%=room_type.get(i)%></td>
+                             <td>$<%=room_price.get(i)%></td>
+                             <td><%=room_availability.get(i)%></td>
+                             <td>
+                                 <%if(room_availability.get(i).equals("NO")){%>
+                                 <select class="city-menu" disabled>
+                                     <option value="" disabled selected>#Rooms ------------</option>
+                                     <option value="1" >1</option>
+                                     <option value="2" >2</option>
+                                     <option value="3" >3</option>
+                                     <option value="4" >4</option>
+                                     <option value="5" >5</option>
+                                     <option value="6" >6</option>
+                                     <option value="7" >7</option>
+                                     <option value="8" >8</option>
+                                     <option value="9" >9</option>
+                                     <option value="10" >10</option>
+                                 </select>
+                                 <%}else{%>
+                                 <select class="city-menu" onchange="checkAvilability(this,<%=i%>,<%=room_id.get(i)%>)">
+                                     <option value="" disabled selected>#Rooms ------------</option>
+                                     <option value="0" >0</option>
+                                     <option value="1" >1</option>
+                                     <option value="2" >2</option>
+                                     <option value="3" >3</option>
+                                     <option value="4" >4</option>
+                                     <option value="5" >5</option>
+                                     <option value="6" >6</option>
+                                     <option value="7" >7</option>
+                                     <option value="8" >8</option>
+                                     <option value="9" >9</option>
+                                     <option value="10" >10</option>
+                                 </select>
+                                 <%}%>
+                             </td>
+                         </tr>
+                         <%}%>
+                     </table>
+                     
+                 </div>
+                 
             </form>
+                     <form  onsubmit="return checkOnClick()" action="makeReservation" method="Post">
+                     <input type="submit" class="btn" id="mRes" value="Apply">
+                     <input type="hidden" class="btn" id="vCheckInDate" name="checkin">
+                     <input type="hidden" class="btn" id="vCheckOutDate" name="checkout">
+                     <input type="hidden" class="btn" id="vAdults" name="adults">
+                     <input type="hidden" class="btn" id="vChildren" name="children">
+                     <input type="hidden" class="btn" id="vNumberOfRooms" name="norooms">
+                     <input type="hidden" class="btn" id="vRoomId" name="roomId">
+                     </form>
         </div>
 
     </body>

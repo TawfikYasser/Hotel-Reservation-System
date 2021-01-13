@@ -50,6 +50,11 @@ public class filterRate extends HttpServlet {
             statement = (Statement) connection.createStatement();
             String query = "SELECT * FROM hotel WHERE hotel_city = '" + city + "' ORDER BY hotel_avg_rate DESC;";
             resultSet = statement.executeQuery(query);
+            String query5 = "SELECT * FROM photos";
+            Statement statement5 = null;
+            statement5 = (Statement) connection.createStatement();
+            ResultSet resultSet5 = null;
+            resultSet5 = statement5.executeQuery(query5);
 
             out.println("<table>");
             while (resultSet.next()) {
@@ -59,7 +64,18 @@ public class filterRate extends HttpServlet {
                 out.println("<figure class='card'>");
                 out.println("<div class='card__hero'>");
                 out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "'>");
-                out.println("<img class='card__img' src='window.jpg'/>");
+                String img = "";
+                while (resultSet5.next()) {
+                    if (resultSet5.getInt("hotel_id") == resultSet.getInt("hotel_id")) {
+                        img = resultSet5.getString("photo");
+                        break;
+                    }
+                }
+                out.println("<img class='card__img' src='" + img + "'/>");
+                statement5 = null;
+                statement5 = (Statement) connection.createStatement();
+                resultSet5 = null;
+                resultSet5 = statement5.executeQuery(query5);
                 out.println("</a>");
                 out.println("<div class='card__middle'>");
                 out.println("<p class='card__middle-text'>");

@@ -50,22 +50,27 @@ public class hotelSearch extends HttpServlet {
             Statement statement2 = null;
             Statement statement3 = null;
             Statement statement4 = null;
+            Statement statement5 = null;
             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
             statement = (Statement) connection.createStatement();
             statement2 = (Statement) connection.createStatement();
             statement3 = (Statement) connection.createStatement();
             statement4 = (Statement) connection.createStatement();
+            statement5 = (Statement) connection.createStatement();
             String query = "SELECT * FROM hotel WHERE hotel_city = '" + city + "'";
             //String query = "SELECT * FROM hotel";
             ResultSet resultSet = null;
             ResultSet newResult = null;
             ResultSet resultSet3 = null;
+            ResultSet resultSet5 = null;
             String query2 = "SELECT * FROM hotel WHERE hotel_city = '" + city + "'";
             String query3 = "SELECT * FROM rate";
+            String query5 = "SELECT * FROM photos";
             String query4 = "";
             resultSet = statement.executeQuery(query);
             newResult = statement2.executeQuery(query2);
             resultSet3 = statement3.executeQuery(query3);
+            resultSet5 = statement5.executeQuery(query5);
             int hotel_id = 0;
             float rate = 0;
             float count = 0;
@@ -96,7 +101,18 @@ public class hotelSearch extends HttpServlet {
                 out.println("<div class='card__hero'>");
                 int id = resultSet.getInt("hotel_id");
                 out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "'>");
-                out.println("<img class='card__img' src='window.jpg'/>");
+                String img = "";
+                while (resultSet5.next()) {
+                    if (resultSet5.getInt("hotel_id") == resultSet.getInt("hotel_id")) {
+                        img = resultSet5.getString("photo");
+                        break;
+                    }
+                }
+                out.println("<img class='card__img' src='" + img + "'/>");
+                statement5 = null;
+                statement5 = (Statement) connection.createStatement();
+                resultSet5 = null;
+                resultSet5 = statement5.executeQuery(query5);
                 out.println("</a>");
                 out.println("<div class='card__middle'>");
                 out.println("<p class='card__middle-text'>");
