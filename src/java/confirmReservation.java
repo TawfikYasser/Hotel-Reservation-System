@@ -4,13 +4,6 @@
  * and open the template in the editor.
  */
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.IOException;
@@ -28,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author tawfe
  */
-@WebServlet(urlPatterns = {"/loginValidation"})
-public class loginValidation extends HttpServlet {
+@WebServlet(urlPatterns = {"/confirmReservation"})
+public class confirmReservation extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +38,18 @@ public class loginValidation extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            String res_id = request.getParameter("reservation_id");
 
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String payment = request.getParameter("reservation_payment");
+            String checkin = request.getParameter("reservation_check_in");
+            String checkout = request.getParameter("reservation_check_out");
+            String adults = request.getParameter("adults");
+            String children = request.getParameter("children");
+            String no_rooms = request.getParameter("no_rooms");
+            String hotel_id = request.getParameter("hotel_id");
+            String user_id = request.getParameter("user_id");
 
+            String status = "Confirmed";
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
             String user = "root";
@@ -57,49 +58,43 @@ public class loginValidation extends HttpServlet {
             Statement statement = null;
             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
             statement = (Statement) connection.createStatement();
-            String query = "SELECT * FROM user";
+            String query = "UPDATE reservation SET status = "
+                    + "'" + status + "'"
+                    + "WHERE (reservation_id = '"
+                    + Integer.valueOf(res_id) + "');";
+            int result = statement.executeUpdate(query);
+
+            int his_res_id = 0;
+            Statement statement1 = null;
+            statement1 = (Statement) connection.createStatement();
             ResultSet resultSet = null;
-            resultSet = statement.executeQuery(query);
-            int flag = 0;
-            String role = "";
+            resultSet = statement1.executeQuery("SELECT * FROM history");
             while (resultSet.next()) {
-                if (resultSet.getString("email").equalsIgnoreCase(email)) {
-                    flag++;
-                    if (resultSet.getString("password").equals(password)) {
-                        flag++;
-                        role = resultSet.getString("role");
-                    }
+                if (resultSet.getString("history_payment").equals(payment) && resultSet.getString("history_check_in").equals(checkin)
+                        && resultSet.getString("history_check_out").equals(checkout)
+                        && resultSet.getInt("hotel_id") == Integer.valueOf(hotel_id)
+                        && resultSet.getInt("user_id") == Integer.valueOf(user_id)
+                        && resultSet.getString("adults").equals(adults)
+                        && resultSet.getString("children").equals(children)
+                        && resultSet.getString("no_rooms").equals(no_rooms)) {
+                    his_res_id = resultSet.getInt("history_id");
                 }
             }
 
-            if (flag == 2) {
-                //All data correct
-                if (role.equals("client")) {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-                    dispatcher.forward(request, response);
-                } else {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("adminPanel.jsp");
-                    dispatcher.forward(request, response);
-                }
-            } else if (flag == 1) {
-                //wrong pass
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /*out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong password!');");
-                    out.println("</script>");*/
-            } else {
-                //email wrong
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /* out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong email!');");
-                    out.println("</script>");*/
-            }
+            Statement statement2 = null;
+            statement2 = (Statement) connection.createStatement();
+            String query2 = "UPDATE history SET status = "
+                    + "'" + status + "'"
+                    + "WHERE (history_id = '"
+                    + his_res_id + "');";
+            int qRes = statement2.executeUpdate(query2);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("reservations.jsp");
+            dispatcher.forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            out.println(e);
+            out.print(e);
         }
     }
 

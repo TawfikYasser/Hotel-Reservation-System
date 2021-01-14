@@ -548,7 +548,7 @@
 
         </div>
         <div class="footer">
-            <p>Made with ❤ By Al-Amir Hassan & Tawfik Yasser</p>
+            <p>Made with ❤ By Al-Amir Hassan & Abd El-Rhman Esmat & Tawfik Yasser</p>
         </div>
     </body>
 </html>

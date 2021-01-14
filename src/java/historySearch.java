@@ -4,20 +4,14 @@
  * and open the template in the editor.
  */
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import javax.servlet.RequestDispatcher;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author tawfe
  */
-@WebServlet(urlPatterns = {"/loginValidation"})
-public class loginValidation extends HttpServlet {
+@WebServlet(urlPatterns = {"/historySearch"})
+public class historySearch extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,61 +39,47 @@ public class loginValidation extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-
+            String from = request.getParameter("from");
+            String to = request.getParameter("to");
+            
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
             String user = "root";
             String passworddb = "troot";
             Connection connection = null;
-            Statement statement = null;
             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
-            statement = (Statement) connection.createStatement();
-            String query = "SELECT * FROM user";
-            ResultSet resultSet = null;
-            resultSet = statement.executeQuery(query);
-            int flag = 0;
-            String role = "";
-            while (resultSet.next()) {
-                if (resultSet.getString("email").equalsIgnoreCase(email)) {
-                    flag++;
-                    if (resultSet.getString("password").equals(password)) {
-                        flag++;
-                        role = resultSet.getString("role");
+            String var = "";
+            if (from.equals("from")) {//from default
+
+            } else if (to.equals("to")) {//to default
+
+            } else {//from and to selected
+
+                Statement statement1 = null;
+                statement1 = (Statement) connection.createStatement();
+                ResultSet resultSet = null;
+                resultSet = statement1.executeQuery("SELECT * FROM history");
+               SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
+               Date from_d = sdformat.parse(from);
+               Date to_d = sdformat.parse(from);
+                //out.println("<h1>"+from+"</h1>");
+//                out.println("<h1>"+to+"</h1>");
+
+                while (resultSet.next()) {
+                               Date in_d = sdformat.parse(resultSet.getString("history_check_in"));
+                               Date out_d = sdformat.parse(resultSet.getString("history_check_in"));
+                    if(in_d.compareTo(from_d) > 0 && out_d.compareTo(to_d) > 0 ){
+                        var = "from before in and out before to";
                     }
                 }
+                
             }
-
-            if (flag == 2) {
-                //All data correct
-                if (role.equals("client")) {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-                    dispatcher.forward(request, response);
-                } else {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("adminPanel.jsp");
-                    dispatcher.forward(request, response);
-                }
-            } else if (flag == 1) {
-                //wrong pass
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /*out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong password!');");
-                    out.println("</script>");*/
-            } else {
-                //email wrong
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /* out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong email!');");
-                    out.println("</script>");*/
-            }
-
+            
+            out.println("<h1>"+var+"</h1>");
+            
         } catch (Exception e) {
             e.printStackTrace();
-            out.println(e);
+            out.print(e);
         }
     }
 

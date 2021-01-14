@@ -130,7 +130,8 @@
 %>
 <html>
     <head>
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="jquery-3.5.1.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Roboto:wght@100&display=swap" rel="stylesheet">
@@ -144,6 +145,7 @@
             var arr_no_rooms = [];
             var roomids = "";
             var noroom = "";
+            
             function checkDates(element)
             {
                    var currentDate = new Date();
@@ -152,7 +154,13 @@
                        if(inputDate < currentDate){
                            alert("Check in date in past");
                        }else{
-                           document.getElementById("vCheckInDate").value = inputDate;
+                            d = new Date(document.getElementById("checkindate").value);
+                            dt = d.getDate();
+                            mn = d.getMonth();
+                            mn++;
+                            yy = d.getFullYear();
+                            document.getElementById("vCheckInDate").value = dt + "/" + mn + "/" + yy;
+                           //document.getElementById("vCheckInDate").value = inputDate;
                        }
                    }
                    if(element.name === "checkoutdate"){
@@ -161,7 +169,13 @@
                        if(inputDate < currentDate || inputDate < checkin){
                            alert("Check out date in past or check out date is before check in date.");
                        }else{
-                            document.getElementById("vCheckOutDate").value = inputDate;
+                            d = new Date(document.getElementById("checkoutdate").value);
+                            dt = d.getDate();
+                            mn = d.getMonth();
+                            mn++;
+                            yy = d.getFullYear();
+                            document.getElementById("vCheckOutDate").value = dt + "/" + mn + "/" + yy;
+                            //document.getElementById("vCheckOutDate").value = inputDate;
                        }
                    }
             }  
@@ -234,6 +248,23 @@
                     return true;
                 }
             }
+            
+            function mydate() {
+  //alert("");
+  document.getElementById("dt").hidden = false;
+  document.getElementById("ndt").hidden = true;
+}
+
+function mydate1() {
+  d = new Date(document.getElementById("dt").value);
+  dt = d.getDate();
+  mn = d.getMonth();
+  mn++;
+  yy = d.getFullYear();
+  document.getElementById("ndt").value = dt + "/" + mn + "/" + yy;
+  document.getElementById("ndt").hidden = false;
+  document.getElementById("dt").hidden = true;
+}
         </script>
         <style>
             *{
@@ -498,7 +529,11 @@
                 transition: .3s;
                 font-family: 'Nunito', sans-serif;
             }
-           
+            #dt {
+                text-indent: -500px;
+                height: 25px;
+                width: 200px;
+            }
             
         </style>
     </head>
@@ -670,11 +705,10 @@
             <div class="form_group">
                 <p class="hotel-info" id="makeReserve"><b>Make a reservation</b></p>
                 <br>
-                
                 <div class="form_group">
                     <label>Check In</label>
                     <br>
-                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)" />
+                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)"  />
                 </div>
                 <div class="form_group">
                     <label>Check Out</label>

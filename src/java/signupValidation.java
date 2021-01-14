@@ -137,7 +137,7 @@ public class signupValidation extends HttpServlet {
 //                        out.println(mex);
 //                    }
 
-                Send_Mail(email,String.valueOf(passwordc),username);
+                Send_Mail(email,String.valueOf(passwordc),diaplayname);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
 
@@ -155,7 +155,7 @@ public class signupValidation extends HttpServlet {
         }
     }
 
-    public void Send_Mail(String email, String password, String username) throws MessagingException {
+    public void Send_Mail(String email, String password, String diaplayname) throws MessagingException {
         String USER_NAME = "tawfekyassertawfek@gmail.com";
         String PASSWORD = "02k0181381t";
         String RECIPIENT = email;
@@ -163,8 +163,8 @@ public class signupValidation extends HttpServlet {
         String from = USER_NAME;
         String pass = PASSWORD;
         String[] to = {RECIPIENT};
-        String subject = "Here are your confirm password";
-        String body = "welcome " + username + " your password is : " + password;
+        String subject = "Hotel Reservation System Password Email";
+        String body = "Welcome " + diaplayname + " your password is : " + password+" , You can use it now for login to the system, HRS Team. Thanks.";
 
         sendFromGMail(from, pass, to, subject, body);
     }

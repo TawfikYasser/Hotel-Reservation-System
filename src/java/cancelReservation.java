@@ -4,19 +4,13 @@
  * and open the template in the editor.
  */
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author tawfe
  */
-@WebServlet(urlPatterns = {"/loginValidation"})
-public class loginValidation extends HttpServlet {
+@WebServlet(urlPatterns = {"/cancelReservation"})
+public class cancelReservation extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,58 +39,38 @@ public class loginValidation extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String res_id = request.getParameter("reservation_id");
 
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
             String user = "root";
             String passworddb = "troot";
             Connection connection = null;
-            Statement statement = null;
             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
-            statement = (Statement) connection.createStatement();
-            String query = "SELECT * FROM user";
+            Statement statement1 = null;
+            statement1 = (Statement) connection.createStatement();
             ResultSet resultSet = null;
-            resultSet = statement.executeQuery(query);
-            int flag = 0;
-            String role = "";
+            resultSet = statement1.executeQuery("SELECT * FROM reserved_rooms");
+            ArrayList<Integer> reservedRooms = new ArrayList<>();
+
             while (resultSet.next()) {
-                if (resultSet.getString("email").equalsIgnoreCase(email)) {
-                    flag++;
-                    if (resultSet.getString("password").equals(password)) {
-                        flag++;
-                        role = resultSet.getString("role");
-                    }
+                if (resultSet.getInt("reservation_id") == Integer.valueOf(res_id)) {
+                    reservedRooms.add(resultSet.getInt("reservation_id"));
                 }
             }
-
-            if (flag == 2) {
-                //All data correct
-                if (role.equals("client")) {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-                    dispatcher.forward(request, response);
-                } else {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("adminPanel.jsp");
-                    dispatcher.forward(request, response);
-                }
-            } else if (flag == 1) {
-                //wrong pass
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /*out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong password!');");
-                    out.println("</script>");*/
-            } else {
-                //email wrong
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /* out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong email!');");
-                    out.println("</script>");*/
+            Statement statement2 = null;
+            statement2 = (Statement) connection.createStatement();
+            for (int i = 0; i < reservedRooms.size(); i++) {
+                int result2 = statement2.executeUpdate("DELETE FROM reserved_rooms WHERE (reservation_id = '" + Integer.valueOf(res_id) + "')");
             }
 
+            Statement statement = null;
+            statement = (Statement) connection.createStatement();
+            String query = "DELETE FROM reservation WHERE (reservation_id = '" + Integer.valueOf(res_id) + "')";
+            int result = statement.executeUpdate(query);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("reservations.jsp");
+            dispatcher.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             out.println(e);

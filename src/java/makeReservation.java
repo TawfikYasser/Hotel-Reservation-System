@@ -145,7 +145,7 @@ public class makeReservation extends HttpServlet {
             
             
             //History
-            
+            statement1 = null;
             statement1 = (Statement) connection.createStatement();
             query1 = "INSERT INTO history(history_payment, history_check_in, history_check_out, hotel_id, user_id,status,adults,children,no_rooms) VALUES("
                     + "'" + payment + "',"
@@ -193,7 +193,7 @@ public class makeReservation extends HttpServlet {
             
             
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("hotelProfile.jsp?hotel_id="+hotel_id);
             dispatcher.forward(request, response);
             
         }
