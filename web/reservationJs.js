@@ -5,28 +5,36 @@
  */
 
 
+
 function searchHistory() {
-    var d = new Date(document.getElementById("checkindate").value);
-    var dt = d.getDate();
-    var mn = d.getMonth();
-    mn++;
-    var yy = d.getFullYear();
-
-    var from = dt + "/" + mn + "/" + yy;
-
-    d = new Date(document.getElementById("checkoutdate").value);
-    dt = d.getDate();
-    mn = d.getMonth();
-    mn++;
-    yy = d.getFullYear();
-
-    var to = dt + "/" + mn + "/" + yy;
+    var from = document.getElementById("checkindate").value;
+    var to = document.getElementById("checkoutdate").value;
     if (from === "") {
         from = "from";
+    } else {
+        var d = new Date(document.getElementById("checkindate").value);
+        var dt = d.getDate();
+        var mn = d.getMonth();
+        mn++;
+        var yy = d.getFullYear();
+
+        from = dt + "/" + mn + "/" + yy;
+
     }
     if (to === "") {
         to = "to";
+    } else {
+        d = new Date(document.getElementById("checkoutdate").value);
+        dt = d.getDate();
+        mn = d.getMonth();
+        mn++;
+        yy = d.getFullYear();
+
+        to = dt + "/" + mn + "/" + yy;
+
     }
+
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function ()
     {

@@ -111,31 +111,6 @@ public class signupValidation extends HttpServlet {
 //                session.setAttribute("session_password", String.valueOf(passwordc));
 //                session.setAttribute("session_phonenumber", phonenumber);
 //                session.setAttribute("session_role", role);
-//                    String to = "alamirhassan8@gmail.com";//change accordingly  
-//                    String from = "tawfekyassertawfek@gmail.com";
-//                    String host = "localhost:3305";//or IP address  
-//
-//                    //Get the session object  
-//                    Properties properties = System.getProperties();
-//                    properties.setProperty("mail.smtp.host", host);
-//                    Session session = Session.getDefaultInstance(properties);
-//
-//                    //compose the message  
-//                    try {
-//                        MimeMessage message = new MimeMessage(session);
-//                        message.setFrom(new InternetAddress(from));
-//                        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-//                        message.setSubject("Ping");
-//                        message.setText("Hello, this is example of sending email  ");
-//
-//                        // Send message  
-//                        Transport.send(message);
-//                        System.out.println("message sent successfully....");
-//
-//                    } catch (MessagingException mex) {
-//                        mex.printStackTrace();
-//                        out.println(mex);
-//                    }
 
                 Send_Mail(email,String.valueOf(passwordc),diaplayname);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");

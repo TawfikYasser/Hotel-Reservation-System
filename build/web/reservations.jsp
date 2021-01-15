@@ -80,6 +80,7 @@
             table.center {
                 margin-left: auto; 
                 margin-right: auto;
+                width: 50%;
                 border-collapse: collapse;
                 border-radius: 5px 5px 0 0;
                 overflow: hidden;

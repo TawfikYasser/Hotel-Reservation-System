@@ -45,6 +45,48 @@
             user_Id = resultSet.getInt("user_id");
         }
     }
+
+    Statement s1 = null;
+    Statement s2 = null;
+    Statement s3 = null;
+    Statement s4 = null;
+    s1 = (Statement) connection.createStatement();
+    s2 = (Statement) connection.createStatement();
+    s3 = (Statement) connection.createStatement();
+    s4 = (Statement) connection.createStatement();
+    ResultSet rs1 = null;
+    ResultSet rs2 = null;
+    ResultSet rs3 = null;
+    ResultSet rs4 = null;
+    String sq1 = "SELECT * FROM user;";
+    String sq2 = "SELECT * FROM hotel;";
+    String sq3 = "SELECT * FROM reservation;";
+    String sq4 = "SELECT * FROM room;";
+    rs1 = s1.executeQuery(sq1);
+    rs2 = s2.executeQuery(sq2);
+    rs3 = s3.executeQuery(sq3);
+    rs4 = s4.executeQuery(sq4);
+    int size = 0;
+    if (rs1 != null) {
+        rs1.last();    // moves cursor to the last row
+        size = rs1.getRow(); // get row id 
+    }
+    int s_users = size;
+    if (rs2 != null) {
+        rs2.last();    // moves cursor to the last row
+        size = rs2.getRow(); // get row id 
+    }
+    int s_hotels = size;
+    if (rs3 != null) {
+        rs3.last();    // moves cursor to the last row
+        size = rs3.getRow(); // get row id 
+    }
+    int s_reservations = size;
+    if (rs4 != null) {
+        rs4.last();    // moves cursor to the last row
+        size = rs4.getRow(); // get row id 
+    }
+    int s_rooms = size;
 %>
 <html>
     <head>
@@ -215,9 +257,11 @@
             <ul>
                 <li><a href="userProfile.jsp?id=<%= user_Id%>"><%=displayname%></a></li>
                 <li><a href="reservations.jsp">Reservations</a></li>
-                <li><a href="#">Hotels</a></li>
-                <li><a href="#">Rooms</a></li>
-                <li><a href="#">Clients</a></li>
+                <li><a href="hotels.jsp">Hotels</a></li>
+                <li><a href="rooms.jsp">Rooms</a></li>
+                <li><a href="clients.jsp">Clients</a></li>
+                <li><a href="notification.jsp">Notification</a></li>
+                <li><a href="rates.jsp">Rates</a></li>
                 <li><a href="#" class="logout">Log Out</a></li>
             </ul>
         </nav>
@@ -231,14 +275,14 @@
                     <div class="card" style="margin-right:200px; background-color: #009879;">
                         <div class="container-card">
                             <h4 style="margin-top: 70px; color: white;"><b>Hotel</b></h4>
-                            <p style="color: white;">12</p>
+                            <p style="color: white;"><%=s_hotels%></p>
                         </div>
                     </div>
 
                     <div class="card" style="background-color: red;">
                         <div class="container-card">
                             <h4 style="margin-top: 70px; color: white;"><b>Client</b></h4>
-                            <p style="color: white;">12</p>
+                            <p style="color: white;"><%=s_users%></p>
                         </div>
                     </div>
 
@@ -247,14 +291,14 @@
                     <div class="card" style="margin-right:200px; background-color: navy;">
                         <div class="container-card">
                             <h4 style="margin-top: 70px; color: white;"><b>Reservation</b></h4>
-                            <p style="color: white;">12</p>
+                            <p style="color: white;"><%=s_reservations%></p>
                         </div>
                     </div>
 
                     <div class="card" style="background-color: orange;">
                         <div class="container-card">
                             <h4 style="margin-top: 70px; color: white;"><b>Room</b></h4>
-                            <p style="color: white;">12</p>
+                            <p style="color: white;"><%=s_rooms%></p>
                         </div>
                     </div>
 

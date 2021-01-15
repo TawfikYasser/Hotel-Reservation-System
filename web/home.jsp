@@ -411,23 +411,7 @@
             <div class="logo">Hotel System</div>
             <ul>
                 <li><a href="userProfile.jsp?id=<%= user_Id%>"><%=displayname%></a></li>
-                <li>
-                    <a href="#">Features</a>
-                    <ul>
-                        <li><a href="#">Pages</a></li>
-                        <li><a href="#">Elements</a></li>
-                        <li><a href="#">Icons</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                    <ul>
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">App Design</a></li>
-                        <li><a href="#">More</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Portfolio</a></li>
+                <li><a href="reservationsClient.jsp?id=<%= user_Id%>">Reservations</a></li>
                 <li><a href="#">Contact Us</a></li>
                 <li><a href="#" class="logout">Log Out</a></li>
             </ul>

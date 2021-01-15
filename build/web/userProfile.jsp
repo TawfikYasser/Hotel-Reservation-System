@@ -255,30 +255,17 @@
     </head>
     <body>
         <nav>
-            <div class="logo">Hotel System</div>
+            <div class="logo">Hotel System (Admin Panel)</div>
             <ul>
                 <li><a href="userProfile.jsp?id=<%= userId%>"><%=displayname%></a></li>
-                <li>
-                    <a href="#">Features</a>
-                    <ul>
-                        <li><a href="#">Pages</a></li>
-                        <li><a href="#">Elements</a></li>
-                        <li><a href="#">Icons</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                    <ul>
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">App Design</a></li>
-                        <li><a href="#">More</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="reservations.jsp">Reservations</a></li>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="rooms.jsp">Rooms</a></li>
+                <li><a href="clients.jsp">Clients</a></li>
                 <li><a href="#" class="logout">Log Out</a></li>
             </ul>
         </nav>
+
 
         <div class="container-img">
             <img class='hotel_img' src='window.jpg'/>
@@ -332,7 +319,7 @@
                 <br>
             </form>
 
-                <form action="changeProfileDataView.jsp">
+            <form action="changeProfileDataView.jsp">
                 <input type="submit" class="btn" value="Change Data">
                 <input type="hidden" name="hiddenId" class="btn" value=<%=userId%>>
             </form>
