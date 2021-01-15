@@ -50,7 +50,7 @@ public class signupValidation extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        //HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(true);
         try {
             String username = request.getParameter("username");
             String diaplayname = request.getParameter("displayname");
@@ -105,19 +105,20 @@ public class signupValidation extends HttpServlet {
                         + "'" + role + "')";
                 int queryResult = statement.executeUpdate(query2);
 
-//                session.setAttribute("session_username", username);
-//                session.setAttribute("session_email", email);
-//                session.setAttribute("session_displayname", diaplayname);
-//                session.setAttribute("session_password", String.valueOf(passwordc));
-//                session.setAttribute("session_phonenumber", phonenumber);
-//                session.setAttribute("session_role", role);
+                
+                session.setAttribute("session_username", username);
+                session.setAttribute("session_email", email);
+                session.setAttribute("session_displayname", diaplayname);
+                session.setAttribute("session_password", String.valueOf(passwordc));
+                session.setAttribute("session_phonenumber", phonenumber);
+                session.setAttribute("session_role", role);
 
                 Send_Mail(email,String.valueOf(passwordc),diaplayname);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
 
             } else {
-                //User not found
+                
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
                 out.println("<script type=\"text/javascript\">");

@@ -41,6 +41,7 @@ public class hotelSearch extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String city = request.getParameter("selectedCity");
+            String u_id = request.getParameter("u_id");
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
             String user = "root";
@@ -85,10 +86,18 @@ public class hotelSearch extends HttpServlet {
                     }
                 }
                 resultSet3 = statement3.executeQuery(query3);
-                rate = rate / count;
-                hotel_rates.add(String.valueOf(rate));
-                rate = 0;
-                count = 0;
+                if (count == 0) {
+                    //rate = rate / count;
+                    hotel_rates.add(String.valueOf(0));
+                    rate = 0;
+                    count = 0;
+                } else {
+                    rate = rate / count;
+                    hotel_rates.add(String.valueOf(rate));
+                    rate = 0;
+                    count = 0;
+                }
+
             }
 
             out.println("<table>");
@@ -100,7 +109,7 @@ public class hotelSearch extends HttpServlet {
                 out.println("<figure class='card'>");
                 out.println("<div class='card__hero'>");
                 int id = resultSet.getInt("hotel_id");
-                out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "'>");
+                out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "&u_id="+u_id+"'>");
                 String img = "";
                 while (resultSet5.next()) {
                     if (resultSet5.getInt("hotel_id") == resultSet.getInt("hotel_id")) {
@@ -145,7 +154,7 @@ public class hotelSearch extends HttpServlet {
                 out.println("</p>");
                 out.println("</div>");
                 out.println("<div class='card__buttons'>");
-                out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "'>");
+                out.println("<a href='hotelProfile.jsp?hotel_id=" + resultSet.getInt("hotel_id") + "&u_id="+u_id+"'>");
                 out.println("More Info");
                 out.println("</a>");
                 out.println("</div>");

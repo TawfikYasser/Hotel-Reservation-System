@@ -254,17 +254,32 @@
         </style>
     </head>
     <body>
+
+        <%if (role.equals("client")) {%>
+
+        <nav>
+            <div class="logo">Hotel System</div>
+            <ul>
+                <li><a href="userProfile.jsp?id=<%= userId%>"><%=displayname%></a></li>
+                <li><a href="reservationsClient.jsp?id=<%= userId%>">Reservations</a></li>
+                <li><a href="login.html" class="logout">Log Out</a></li>
+            </ul>
+        </nav>
+        <%} else {%>
         <nav>
             <div class="logo">Hotel System (Admin Panel)</div>
             <ul>
                 <li><a href="userProfile.jsp?id=<%= userId%>"><%=displayname%></a></li>
                 <li><a href="reservations.jsp">Reservations</a></li>
-                <li><a href="#">Hotels</a></li>
+                <li><a href="hotels.jsp">Hotels</a></li>
                 <li><a href="rooms.jsp">Rooms</a></li>
                 <li><a href="clients.jsp">Clients</a></li>
-                <li><a href="#" class="logout">Log Out</a></li>
+                <li><a href="notification.jsp">Notification</a></li>
+                <li><a href="rates.jsp">Rates</a></li>
+                <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>
+        <%}%>
 
 
         <div class="container-img">

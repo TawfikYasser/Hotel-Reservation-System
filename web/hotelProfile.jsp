@@ -13,6 +13,7 @@
 <%@page import="java.sql.Connection"%>
 <%
     String hotel_id = request.getParameter("hotel_id");
+    String u_id = request.getParameter("u_id");
     Class.forName("com.mysql.jdbc.Driver");
     String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
     String user = "root";
@@ -249,6 +250,10 @@
                 }
             }
             
+            function getRate(){
+                document.getElementById("rate_number").value = document.getElementById("rateList").value;
+            }
+            
         </script>
         <style>
             *{
@@ -452,6 +457,17 @@
                 padding: 0 30px;
                 font-family: 'Nunito', sans-serif;
             }
+            .profile-container form .form-control{
+                width: 25%;
+                height: 50px;
+                color: black;
+                background: #EAEAEA;
+                border-radius: 1px;
+                border: 0px solid silver;
+                margin: 0px 0 25px 600px;
+                padding: 0 10px;
+                font-family: 'Nunito', sans-serif;
+            }
             .city-menu{
                 padding: 8px 12px;
                 color: #333333;
@@ -523,29 +539,11 @@
     </head>
 
     <body>
-        <nav>
+         <nav>
             <div class="logo">Hotel System</div>
             <ul>
-                <li><a href="profile.jsp">Profile</a></li>
-                <li>
-                    <a href="#">Features</a>
-                    <ul>
-                        <li><a href="#">Pages</a></li>
-                        <li><a href="#">Elements</a></li>
-                        <li><a href="#">Icons</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                    <ul>
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">App Design</a></li>
-                        <li><a href="#">More</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#" class="logout">Log Out</a></li>
+                <li><a href="reservationsClient.jsp?id=<%= userId%>">Reservations</a></li>
+                <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>
 
@@ -825,6 +823,30 @@
                      <input type="hidden" class="btn" id="vUserId" name="user_id" value='<%=userId%>'>
                      <input type="hidden" class="btn" id="vNights" name="noNights">
                      </form>
+                     
+                         <form action = "addRate" method="POST">    
+                             <div class="form_group">
+                                 <select class="city-menu" id="rateList" name="rateList" data-dropdown onchange="getRate()">
+                                     <option value="" disabled selected>Select a rate</option>
+                                     <option value="1">1</option>
+                                     <option value="2">2</option>
+                                     <option value="3">3</option>
+                                     <option value="4">4</option>
+                                     <option value="5">5</option>
+                                     
+                                 </select>
+                                 <label id="listError"></label>
+                             </div>
+                             
+                             <div class="form-group">
+                                 <input type="text" class="form-control" name="comment" placeholder="Comment" onchange="myFunction(this)">
+                             </div>
+                             <input type="submit" class="btn" value="Save">
+                             <input type="hidden" name="h_rate" class="btn" id="rate_number">
+                             <input type="hidden" name="h_hotel_id" class="btn" value='<%=hotel_id%>'>
+                             <input type="hidden" name="h_user_id" class="btn" value='<%=u_id%>'>
+                         </form>
+                     
         </div>
 
     </body>

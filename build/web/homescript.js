@@ -6,6 +6,7 @@
 //Js
 function searchHotels() {
     var selectedCity = document.getElementById("city").value;
+    var u_id = document.getElementById("u_id").value;
     if (selectedCity === "") {
 
     } else {
@@ -22,7 +23,7 @@ function searchHotels() {
                 $(".filter_box").show();
             }
         };
-        xmlhttp.open("GET", "hotelSearch?selectedCity=" + selectedCity, true);
+        xmlhttp.open("GET", "hotelSearch?selectedCity=" + selectedCity+"&u_id="+u_id, true);
         xmlhttp.send();
     }
 }

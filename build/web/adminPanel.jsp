@@ -262,7 +262,7 @@
                 <li><a href="clients.jsp">Clients</a></li>
                 <li><a href="notification.jsp">Notification</a></li>
                 <li><a href="rates.jsp">Rates</a></li>
-                <li><a href="#" class="logout">Log Out</a></li>
+                <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>
 
@@ -274,15 +274,15 @@
                 <div class="form_group">
                     <div class="card" style="margin-right:200px; background-color: #009879;">
                         <div class="container-card">
-                            <h4 style="margin-top: 70px; color: white;"><b>Hotel</b></h4>
-                            <p style="color: white;"><%=s_hotels%></p>
+                            <h4 style="margin-top: 60px; color: white; font-size: 30px;"><b>Hotels</b></h4>
+                            <p style="color: white; font-size: 30px;"><%=s_hotels%></p>
                         </div>
                     </div>
 
                     <div class="card" style="background-color: red;">
                         <div class="container-card">
-                            <h4 style="margin-top: 70px; color: white;"><b>Client</b></h4>
-                            <p style="color: white;"><%=s_users%></p>
+                            <h4 style="margin-top: 60px; color: white; font-size: 30px;"><b>Clients</b></h4>
+                            <p style="color: white; font-size: 30px;"><%=s_users%></p>
                         </div>
                     </div>
 
@@ -290,15 +290,15 @@
 
                     <div class="card" style="margin-right:200px; background-color: navy;">
                         <div class="container-card">
-                            <h4 style="margin-top: 70px; color: white;"><b>Reservation</b></h4>
-                            <p style="color: white;"><%=s_reservations%></p>
+                            <h4 style="margin-top: 60px; color: white; font-size: 30px;"><b>Reservations</b></h4>
+                            <p style="color: white; font-size: 30px;"><%=s_reservations%></p>
                         </div>
                     </div>
 
                     <div class="card" style="background-color: orange;">
                         <div class="container-card">
-                            <h4 style="margin-top: 70px; color: white;"><b>Room</b></h4>
-                            <p style="color: white;"><%=s_rooms%></p>
+                            <h4 style="margin-top: 60px; color: white; font-size: 30px;"><b>Rooms</b></h4>
+                            <p style="color: white; font-size: 30px;"><%=s_rooms%></p>
                         </div>
                     </div>
 

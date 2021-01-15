@@ -412,8 +412,7 @@
             <ul>
                 <li><a href="userProfile.jsp?id=<%= user_Id%>"><%=displayname%></a></li>
                 <li><a href="reservationsClient.jsp?id=<%= user_Id%>">Reservations</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#" class="logout">Log Out</a></li>
+                <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>
 
@@ -449,6 +448,7 @@
                     <label>Check In</label>
                     <br>
                     <input class="city-menu" type="date" name="checkindate"/>
+                    <input class="city-menu" type="hidden" id="u_id" name="u_id" value='<%=user_Id%>'/>
                 </div>
                 <div class="form_group">
                     <label>Check Out</label>
