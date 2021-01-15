@@ -75,26 +75,18 @@ public class loginValidation extends HttpServlet {
             if (flag == 2) {
                 //All data correct
                 if (role.equals("client")) {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-                    dispatcher.forward(request, response);
+
+                    response.sendRedirect("home.jsp?email=" + email + "&password=" + password);
                 } else {
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("adminPanel.jsp");
-                    dispatcher.forward(request, response);
+                    response.sendRedirect("adminPanel.jsp?email=" + email + "&password=" + password);
                 }
             } else if (flag == 1) {
                 //wrong pass
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /*out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong password!');");
-                    out.println("</script>");*/
+                response.sendRedirect("index.html");
             } else {
                 //email wrong
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-                dispatcher.forward(request, response);
-                /* out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Wrong email!');");
-                    out.println("</script>");*/
+                response.sendRedirect("index.html");
+
             }
 
         } catch (Exception e) {

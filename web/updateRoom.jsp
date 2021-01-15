@@ -209,7 +209,7 @@
         <div class="container">
             <img src="hotelicon.png" alt="Hotel Reservation System" width="100" height="100" class="center">
             <h1>Update Room Data</h1>
-            <form onsubmit= "return checkForm(this);" action = "updateRoomData">    
+            <form onsubmit= "return checkForm(this);" action = "updateRoomData" method="Post">    
                 <div class="form-group">
                     <input type="text" class="form-control" name="room_type" placeholder="Room Type" id="room_type" value='<%=type%>' onchange="myFunction(this)">
                     <label id="typeError"></label>

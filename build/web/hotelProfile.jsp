@@ -4,6 +4,7 @@
     Author     : tawfe
 --%>
 
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -39,7 +40,7 @@
     String hotel_min_price = "";
     String hotel_max_price = "";
     String hotel_availability = "";
-    String userId ="";
+    String userId = "";
     ArrayList<String> hotel_photos = new ArrayList<>();
 
     while (resultSet.next()) {
@@ -65,30 +66,16 @@
 
     statement = null;
     statement = (Statement) connection.createStatement();
-    query = "SELECT * FROM rate WHERE hotel_id ='" + hotel_id + "'";
-    resultSet = null;
-    resultSet = statement.executeQuery(query);
-    while (resultSet.next()) {
-        rComments.add(resultSet.getString("comment"));
-        rValues.add(resultSet.getString("rate"));
-        rUserId.add(resultSet.getInt("user_id"));
+    String query5 = "SELECT rate.comment, rate.rate, rate.user_id , rate.hotel_id, user.user_id AS uid, user.display_name FROM rate "
+            + "INNER JOIN user ON rate.user_id = user.user_id AND rate.hotel_id ='" + Integer.valueOf(hotel_id) + "'";
+    ResultSet resultSet3 = null;
+    resultSet3 = statement.executeQuery(query5);
+    while (resultSet3.next()) {
+        rComments.add(resultSet3.getString("comment"));
+        rValues.add(resultSet3.getString("rate"));
+        rUserId.add(resultSet3.getInt("uid"));
+        rUserName.add(resultSet3.getString("display_name"));
     }
-
-    statement = null;
-    statement = (Statement) connection.createStatement();
-    query = "SELECT * FROM user";
-    resultSet = null;
-    resultSet = statement.executeQuery(query);
-    while (resultSet.next()) {
-        for (int i = 0; i < rUserId.size(); i++) {
-            if (resultSet.getInt("user_id") == rUserId.get(i)) {
-                userId = resultSet.getString("user_id");
-                rUserName.add(resultSet.getString("display_name"));
-            }
-        }
-
-    }
-
     statement = null;
     statement = (Statement) connection.createStatement();
     query = "SELECT * FROM meals WHERE hotel_id='" + hotel_id + "'";
@@ -132,7 +119,7 @@
 <html>
     <head>
 
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="jquery-3.5.1.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Roboto:wght@100&display=swap" rel="stylesheet">
@@ -146,100 +133,100 @@
             var arr_no_rooms = [];
             var roomids = "";
             var noroom = "";
-            
+
             function checkDates(element)
             {
-                   var currentDate = new Date();
-                   if(element.name === "checkindate"){
-                       var inputDate = new Date(element.value);
-                       if(inputDate < currentDate){
-                           alert("Check in date in past");
-                       }else{
-                            d = new Date(document.getElementById("checkindate").value);
-                            dt = d.getDate();
-                            mn = d.getMonth();
-                            mn++;
-                            yy = d.getFullYear();
-                            document.getElementById("vCheckInDate").value = dt + "/" + mn + "/" + yy;
-                           //document.getElementById("vCheckInDate").value = inputDate;
-                       }
-                   }
-                   if(element.name === "checkoutdate"){
+                var currentDate = new Date();
+                if (element.name === "checkindate") {
+                    var inputDate = new Date(element.value);
+                    if (inputDate < currentDate) {
+                        alert("Check in date in past");
+                    } else {
+                        d = new Date(document.getElementById("checkindate").value);
+                        dt = d.getDate();
+                        mn = d.getMonth();
+                        mn++;
+                        yy = d.getFullYear();
+                        document.getElementById("vCheckInDate").value = dt + "/" + mn + "/" + yy;
+                        //document.getElementById("vCheckInDate").value = inputDate;
+                    }
+                }
+                if (element.name === "checkoutdate") {
                     var inputDate = new Date(element.value);
                     var checkin = new Date(document.getElementById("checkindate").value);
-                       if(inputDate < currentDate || inputDate < checkin){
-                           alert("Check out date in past or check out date is before check in date.");
-                       }else{
-                            d = new Date(document.getElementById("checkoutdate").value);
-                            dt = d.getDate();
-                            mn = d.getMonth();
-                            mn++;
-                            yy = d.getFullYear();
-                            document.getElementById("vCheckOutDate").value = dt + "/" + mn + "/" + yy;
-                            //document.getElementById("vCheckOutDate").value = inputDate;
-                       }
-                   }
-            }  
-            
-            
-            function checkAvilability(element,index,room_id){
+                    if (inputDate < currentDate || inputDate < checkin) {
+                        alert("Check out date in past or check out date is before check in date.");
+                    } else {
+                        d = new Date(document.getElementById("checkoutdate").value);
+                        dt = d.getDate();
+                        mn = d.getMonth();
+                        mn++;
+                        yy = d.getFullYear();
+                        document.getElementById("vCheckOutDate").value = dt + "/" + mn + "/" + yy;
+                        //document.getElementById("vCheckOutDate").value = inputDate;
+                    }
+                }
+            }
+
+
+            function checkAvilability(element, index, room_id) {
                 var selectedValue = document.getElementById("room-menu").value;//selected value for each room
                 //Adding the ids to the array
-                var flag =0;
+                var flag = 0;
                 var position;
                 var valueFlag = false;
-                for(var i =0;i<arr_room_ids.length;i++){
-                    if(arr_room_ids[i] !== room_id){
+                for (var i = 0; i < arr_room_ids.length; i++) {
+                    if (arr_room_ids[i] !== room_id) {
                         flag++;
-                    }else{
+                    } else {
                         position = i;
                         valueFlag = true;
                     }
                 }
-                if(flag === arr_room_ids.length){
+                if (flag === arr_room_ids.length) {
                     arr_room_ids.push(room_id);
                 }
-                if(!valueFlag){
+                if (!valueFlag) {
                     arr_no_rooms.push(element.value);
-                }else{
+                } else {
                     arr_no_rooms[position] = element.value;
                 }
 
-                if(selectedValue===""){
+                if (selectedValue === "") {
                     alert("Please choose a room number from above first!");
-                }else{
-    
-                        counter = 0;
-                        arr[index] = Number(element.value);
-                        var i;
-                        for(i= 0 ; i < arr.length ;i++){
-                            if(isNaN(arr[i])){
-                                arr[i] = 0;
-                            }
-                            counter+= arr[i];
+                } else {
+
+                    counter = 0;
+                    arr[index] = Number(element.value);
+                    var i;
+                    for (i = 0; i < arr.length; i++) {
+                        if (isNaN(arr[i])) {
+                            arr[i] = 0;
                         }
-                        if(counter > Number(selectedValue)){
-                            alert("You must choose only "+selectedValue+" rooms.");
-                        } 
+                        counter += arr[i];
+                    }
+                    if (counter > Number(selectedValue)) {
+                        alert("You must choose only " + selectedValue + " rooms.");
+                    }
                 }
             }
-            
-            function checkOnClick(){
-                
+
+            function checkOnClick() {
+
                 var selectedValue = document.getElementById("room-menu").value;
-                if(counter < Number(selectedValue)){
-                        alert("You must choose "+selectedValue+" rooms.");
-                        return false;
-                }else{
-                    for(var i =0;i<arr_room_ids.length;i++){
-                        roomids+=arr_room_ids[i];
-                        roomids+=",";
-                        noroom+= arr_no_rooms[i];
-                        noroom+=",";
+                if (counter < Number(selectedValue)) {
+                    alert("You must choose " + selectedValue + " rooms.");
+                    return false;
+                } else {
+                    for (var i = 0; i < arr_room_ids.length; i++) {
+                        roomids += arr_room_ids[i];
+                        roomids += ",";
+                        noroom += arr_no_rooms[i];
+                        noroom += ",";
                     }
                     var c_in = document.getElementById("checkindate").value;
                     var c_out = document.getElementById("checkoutdate").value;
-                    var nights_v = (new Date(c_out).getDate()) - (new Date(c_in).getDate()); 
+                    var nights_v = (new Date(c_out).getDate()) - (new Date(c_in).getDate());
                     document.getElementById("vAdults").value = document.getElementById("adults-menu").value;
                     document.getElementById("vChildren").value = document.getElementById("children-menu").value;
                     document.getElementById("vNumberOfRooms").value = document.getElementById("room-menu").value;
@@ -249,11 +236,11 @@
                     return true;
                 }
             }
-            
-            function getRate(){
+
+            function getRate() {
                 document.getElementById("rate_number").value = document.getElementById("rateList").value;
             }
-            
+
         </script>
         <style>
             *{
@@ -442,7 +429,7 @@
                 padding: 0 30px;
                 font-family: 'Nunito', sans-serif;
             }
-            
+
             .hotel-info{
                 font-size: 25px;
             }
@@ -478,13 +465,13 @@
                 border: 1px solid #dddddd;
                 cursor: pointer;
                 border-radius: 1px;
-                
+
             }
             table, th, td {
                 border-collapse: collapse;
                 padding: 15px;
                 text-align: center;
-                
+
             }
 
             table.center {
@@ -534,15 +521,15 @@
                 height: 25px;
                 width: 200px;
             }
-            
+
         </style>
     </head>
 
     <body>
-         <nav>
+        <nav>
             <div class="logo">Hotel System</div>
             <ul>
-                <li><a href="reservationsClient.jsp?id=<%= userId%>">Reservations</a></li>
+                <li><a href="reservationsClient.jsp?id=<%=u_id%>">Reservations</a></li>
                 <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>
@@ -550,9 +537,9 @@
         <div class="container-img">
             <img class='hotel_img' src='<%=hotel_photos.get(0)%>'/>
             <div class="center-hotel-name"><b><%=hotel_name%></b></div>
-            
-                
-                <a href="#makeReserve"><input type="submit" class="btn" value="Reserve"></a>
+
+
+            <a href="#makeReserve"><input type="submit" class="btn" value="Reserve"></a>
 
         </div>
 
@@ -572,282 +559,286 @@
                 <br>
                 <hr>
                 <div class="form_group">
-                <label class="hotel-info">Hotel City: <b><%=hotel_city%><b></label>
-                            </div>
-                            <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Phone: <b><%=hotel_phone%><b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Stars: <b><%=hotel_stars%> stars<b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Distance: <b><%=hotel_distance%> km from center<b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Rating: <b><%=hotel_avg_rate%><b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Minimum Price: $<b><%=hotel_min_price%><b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Maximum Price: $<b><%=hotel_max_price%><b></label>
-                                </div>
-                <hr>
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Availability: <b><%=hotel_availability%><b></label>
+                    <label class="hotel-info">Hotel City: <b><%=hotel_city%><b></label>
                                 </div>
                                 <hr>
+                                <div class="form_group">
+                                    <label class="hotel-info">Hotel Phone: <b><%=hotel_phone%><b></label>
+                                                </div>
+                                                <hr>
+                                                <div class="form_group">
+                                                    <label class="hotel-info">Hotel Stars: <b><%=hotel_stars%> stars<b></label>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="form_group">
+                                                                    <label class="hotel-info">Hotel Distance: <b><%=hotel_distance%> km from center<b></label>
+                                                                                </div>
+                                                                                <hr>
+                                                                                <div class="form_group">
+                                                                                    <label class="hotel-info">Hotel Rating: <b><%=hotel_avg_rate%><b></label>
+                                                                                                </div>
+                                                                                                <hr>
+                                                                                                <div class="form_group">
+                                                                                                    <label class="hotel-info">Hotel Minimum Price: $<b><%=hotel_min_price%><b></label>
+                                                                                                                </div>
+                                                                                                                <hr>
+                                                                                                                <div class="form_group">
+                                                                                                                    <label class="hotel-info">Hotel Maximum Price: $<b><%=hotel_max_price%><b></label>
+                                                                                                                                </div>
+                                                                                                                                <hr>
+                                                                                                                                <div class="form_group">
+                                                                                                                                    <label class="hotel-info">Hotel Availability: <b><%=hotel_availability%><b></label>
+                                                                                                                                                </div>
+                                                                                                                                                <hr>
 
-                <div class="form_group">
-                    <label class="hotel-info">Hotel Ratings</label>
-                </div>
+                                                                                                                                                <div class="form_group">
+                                                                                                                                                    <label class="hotel-info">Hotel Ratings</label>
+                                                                                                                                                </div>
 
-                <%if (rUserName.size() > 0) {%>
-                <%for (int i = 0; i < rUserName.size(); i++) {%>
-                <div class="rate-card">
-                    <div class="w3-card-4" >
-                        <header class="w3-container w3-blue" style="background-color: navy;">
+                                                                                                                                                <%if (rUserName.size() > 0) {%>
+                                                                                                                                                <%for (int i = 0; i < rUserName.size(); i++) {
 
-                            <h1><%=rUserName.get(i)%></h1>
+                        if (!rValues.get(i).equals("0")) {%>
 
-                        </header>
+                                                                                                                                                <div class="rate-card">
+                                                                                                                                                    <div class="w3-card-4" >
+                                                                                                                                                        <header class="w3-container w3-blue" style="background-color: navy;">
 
-                        <div class="w3-container">
-                            <p><%=rComments.get(i)%></p>
-                        </div>
+                                                                                                                                                            <h1><%=rUserName.get(i)%></h1>
 
-                        <footer class="w3-container w3-blue" style="background-color: navy;">
-                            <h5><%=rValues.get(i)%></h5>
-                        </footer>
-                    </div>
-                </div>
-                <%}%>
-                <%}%>
-                <hr>
+                                                                                                                                                        </header>
 
-                <%if (meals.size() > 0) {%>
-                <div class="form_group">
-                    <p class="hotel-info"><strong>Hotel Meals</strong></p>
-                    <br>
-                    <%for (int i = 0; i < meals.size(); i++) {%>
-                    <label class="hotel-info">*Meal <%=(i + 1)%>*</label>
-                    <br>
-                    <label class="hotel-info">Meal Name: <%=meals.get(i)%></label>
-                    <br>
-                    <label class="hotel-info">Meal Price: $<%=meals_price.get(i)%></label>
-                    <br>
-                    <br>
-                    <%}%>
-                </div>
-                <%}%>
-                <hr>
+                                                                                                                                                        <div class="w3-container">
+                                                                                                                                                            <p><%=rComments.get(i)%></p>
+                                                                                                                                                        </div>
 
-                <%if (facilities.size() > 0) {%>
-                <div class="form_group">
-                    <p class="hotel-info"><b>Most popular facilities</b></p>
-                    <br>
-                    <%for (int i = 0; i < facilities.size(); i++) {%>
-                    <label class="hotel-info">*Facility <%=(i + 1)%>*</label>
-                    <br>
-                    <label class="hotel-info"><%=facilities.get(i)%></label>
-                    <br>
-                    <%}%>
-                </div>
-                <%}%>
-                <hr>
+                                                                                                                                                        <footer class="w3-container w3-blue" style="background-color: navy;">
+                                                                                                                                                            <h5><%=rValues.get(i)%></h5>
+                                                                                                                                                        </footer>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                <%}%>
+                                                                                                                                                <%}%>
+                                                                                                                                                <%}%>
+                                                                                                                                                <hr>
 
-                <%if (room_type.size() > 0) {%>
-                <div class="form_group">
-                    <p class="hotel-info"><b>Hotel Rooms</b></p>
-                    <br>
-                    <%for (int i = 0; i < room_type.size(); i++) {%>
-                    <br>
-                    <label class="hotel-info">*Room <%=(i + 1)%>*</label>
-                    <br>
-                    <label class="hotel-info">Room Type: <%=room_type.get(i)%></label>
-                    <br>
-                    <label class="hotel-info">Room Availability: <%=room_availability.get(i)%></label>
-                    <br>
-                    <label class="hotel-info">Room Price: $<%=room_price.get(i)%></label>
-                    <br>
-                    <%}%>
-                </div>
-                <%}%>
+                                                                                                                                                <%if (meals.size() > 0) {%>
+                                                                                                                                                <div class="form_group">
+                                                                                                                                                    <p class="hotel-info"><strong>Hotel Meals</strong></p>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%for (int i = 0; i < meals.size(); i++) {%>
+                                                                                                                                                    <label class="hotel-info">*Meal <%=(i + 1)%>*</label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">Meal Name: <%=meals.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">Meal Price: $<%=meals_price.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%}%>
+                                                                                                                                                </div>
+                                                                                                                                                <%}%>
+                                                                                                                                                <hr>
 
-                
-                 <hr>
+                                                                                                                                                <%if (facilities.size() > 0) {%>
+                                                                                                                                                <div class="form_group">
+                                                                                                                                                    <p class="hotel-info"><b>Most popular facilities</b></p>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%for (int i = 0; i < facilities.size(); i++) {%>
+                                                                                                                                                    <label class="hotel-info">*Facility <%=(i + 1)%>*</label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info"><%=facilities.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%}%>
+                                                                                                                                                </div>
+                                                                                                                                                <%}%>
+                                                                                                                                                <hr>
 
-            
-            <div class="form_group">
-                <p class="hotel-info" id="makeReserve"><b>Make a reservation</b></p>
-                <br>
-                <div class="form_group">
-                    <label>Check In</label>
-                    <br>
-                    <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)"  />
-                </div>
-                <div class="form_group">
-                    <label>Check Out</label>
-                    <br>
-                    <input class="city-menu" type="date" name="checkoutdate" id="checkoutdate" onchange="checkDates(this)" />
-                </div>
-                <div class="form_group">
-                    <label>Number of Adults</label>
-                    <br>
-                    <select class="city-menu" id="adults-menu">
-                        <option value="" disabled selected>Number of adults</option>
-                        <option value="1" >1</option>
-                        <option value="2" >2</option>
-                        <option value="3" >3</option>
-                        <option value="4" >4</option>
-                        <option value="5" >5</option>
-                        <option value="1" >6</option>
-                        <option value="2" >7</option>
-                        <option value="3" >8</option>
-                        <option value="4" >9</option>
-                        <option value="5" >10</option>
-                    </select>
-                </div>
-                <div class="form_group">
-                    <label>Number of Children</label>
-                    <br>
-                    <select class="city-menu" id="children-menu">
-                        <option value="" disabled selected>Number of children</option>
-                        <option value="0" >0</option>
-                        <option value="1" >1</option>
-                        <option value="2" >2</option>
-                        <option value="3" >3</option>
-                        <option value="4" >4</option>
-                        <option value="5" >5</option>
-                        <option value="6" >6</option>
-                        <option value="7" >7</option>
-                        <option value="8" >8</option>
-                        <option value="9" >9</option>
-                        <option value="10" >10</option>
-                    </select>
-                </div>
-                <div class="form_group">
-                    <label>Number of Rooms</label>
-                    <br>
-                    <select class="city-menu" id="room-menu">
-                        <option value="" disabled selected>Number of rooms</option>
-                        <option value="1" >1</option>
-                        <option value="2" >2</option>
-                        <option value="3" >3</option>
-                        <option value="4" >4</option>
-                        <option value="5" >5</option>
-                        <option value="6" >6</option>
-                        <option value="7" >7</option>
-                        <option value="8" >8</option>
-                        <option value="9" >9</option>
-                        <option value="10" >10</option>
-                    </select>
-                </div>
-                <br>
-            </div>
-                 
-                 
-                 <div class="table-group">
-                     
-                     <table class="center">
-                         
-                         <tr>
-                             <th>Room #</th>
-                             <th>Room Type</th>
-                             <th>Room Price</th>
-                             <th>Room Availability</th>
-                             <th># Of Rooms</th>
-                         </tr>
-                         
-                         <%for(int i = 0 ;i <room_type.size();i++){%>
-                         <tr>
-                             <td><%=room_id.get(i)%></td> 
-                             <td><%=room_type.get(i)%></td>
-                             <td>$<%=room_price.get(i)%></td>
-                             <td><%=room_availability.get(i)%></td>
-                             <td>
-                                 <%if(room_availability.get(i).equals("NO")){%>
-                                 <select class="city-menu" disabled>
-                                     <option value="" disabled selected>#Rooms ------------</option>
-                                     <option value="1" >1</option>
-                                     <option value="2" >2</option>
-                                     <option value="3" >3</option>
-                                     <option value="4" >4</option>
-                                     <option value="5" >5</option>
-                                     <option value="6" >6</option>
-                                     <option value="7" >7</option>
-                                     <option value="8" >8</option>
-                                     <option value="9" >9</option>
-                                     <option value="10" >10</option>
-                                 </select>
-                                 <%}else{%>
-                                 <select class="city-menu" onchange="checkAvilability(this,<%=i%>,<%=room_id.get(i)%>)">
-                                     <option value="" disabled selected>#Rooms ------------</option>
-                                     <option value="0" >0</option>
-                                     <option value="1" >1</option>
-                                     <option value="2" >2</option>
-                                     <option value="3" >3</option>
-                                     <option value="4" >4</option>
-                                     <option value="5" >5</option>
-                                     <option value="6" >6</option>
-                                     <option value="7" >7</option>
-                                     <option value="8" >8</option>
-                                     <option value="9" >9</option>
-                                     <option value="10" >10</option>
-                                 </select>
-                                 <%}%>
-                             </td>
-                         </tr>
-                         <%}%>
-                     </table>
-                     
-                 </div>
-                 
-            </form>
-                     <form  onsubmit="return checkOnClick()" action="makeReservation" method="Post">
-                     <input type="submit" class="btn" id="mRes" value="Apply">
-                     <input type="hidden" class="btn" id="vCheckInDate" name="checkin">
-                     <input type="hidden" class="btn" id="vCheckOutDate" name="checkout">
-                     <input type="hidden" class="btn" id="vAdults" name="adults">
-                     <input type="hidden" class="btn" id="vChildren" name="children">
-                     <input type="hidden" class="btn" id="vNumberOfRooms" name="norooms">
-                     <input type="hidden" class="btn" id="vRoomId" name="roomId">
-                     <input type="hidden" class="btn" id="vRoomNos" name="roomNo">
-                     <input type="hidden" class="btn" id="vHotelId" name="hotel_id" value='<%=hotel_id%>'>
-                     <input type="hidden" class="btn" id="vUserId" name="user_id" value='<%=userId%>'>
-                     <input type="hidden" class="btn" id="vNights" name="noNights">
-                     </form>
-                     
-                         <form action = "addRate" method="POST">    
-                             <div class="form_group">
-                                 <select class="city-menu" id="rateList" name="rateList" data-dropdown onchange="getRate()">
-                                     <option value="" disabled selected>Select a rate</option>
-                                     <option value="1">1</option>
-                                     <option value="2">2</option>
-                                     <option value="3">3</option>
-                                     <option value="4">4</option>
-                                     <option value="5">5</option>
-                                     
-                                 </select>
-                                 <label id="listError"></label>
-                             </div>
-                             
-                             <div class="form-group">
-                                 <input type="text" class="form-control" name="comment" placeholder="Comment" onchange="myFunction(this)">
-                             </div>
-                             <input type="submit" class="btn" value="Save">
-                             <input type="hidden" name="h_rate" class="btn" id="rate_number">
-                             <input type="hidden" name="h_hotel_id" class="btn" value='<%=hotel_id%>'>
-                             <input type="hidden" name="h_user_id" class="btn" value='<%=u_id%>'>
-                         </form>
-                     
-        </div>
+                                                                                                                                                <%if (room_type.size() > 0) {%>
+                                                                                                                                                <div class="form_group">
+                                                                                                                                                    <p class="hotel-info"><b>Hotel Rooms</b></p>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%for (int i = 0; i < room_type.size(); i++) {%>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">*Room <%=(i + 1)%>*</label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">Room Type: <%=room_type.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">Room Availability: <%=room_availability.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <label class="hotel-info">Room Price: $<%=room_price.get(i)%></label>
+                                                                                                                                                    <br>
+                                                                                                                                                    <%}%>
+                                                                                                                                                </div>
+                                                                                                                                                <%}%>
 
-    </body>
-</html>
+
+                                                                                                                                                <hr>
+
+
+                                                                                                                                                <div class="form_group">
+                                                                                                                                                    <p class="hotel-info" id="makeReserve"><b>Make a reservation</b></p>
+                                                                                                                                                    <br>
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <label>Check In</label>
+                                                                                                                                                        <br>
+                                                                                                                                                        <input class="city-menu" type="date"  name="checkindate" id="checkindate" onchange="checkDates(this)"  />
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <label>Check Out</label>
+                                                                                                                                                        <br>
+                                                                                                                                                        <input class="city-menu" type="date" name="checkoutdate" id="checkoutdate" onchange="checkDates(this)" />
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <label>Number of Adults</label>
+                                                                                                                                                        <br>
+                                                                                                                                                        <select class="city-menu" id="adults-menu">
+                                                                                                                                                            <option value="" disabled selected>Number of adults</option>
+                                                                                                                                                            <option value="1" >1</option>
+                                                                                                                                                            <option value="2" >2</option>
+                                                                                                                                                            <option value="3" >3</option>
+                                                                                                                                                            <option value="4" >4</option>
+                                                                                                                                                            <option value="5" >5</option>
+                                                                                                                                                            <option value="1" >6</option>
+                                                                                                                                                            <option value="2" >7</option>
+                                                                                                                                                            <option value="3" >8</option>
+                                                                                                                                                            <option value="4" >9</option>
+                                                                                                                                                            <option value="5" >10</option>
+                                                                                                                                                        </select>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <label>Number of Children</label>
+                                                                                                                                                        <br>
+                                                                                                                                                        <select class="city-menu" id="children-menu">
+                                                                                                                                                            <option value="" disabled selected>Number of children</option>
+                                                                                                                                                            <option value="0" >0</option>
+                                                                                                                                                            <option value="1" >1</option>
+                                                                                                                                                            <option value="2" >2</option>
+                                                                                                                                                            <option value="3" >3</option>
+                                                                                                                                                            <option value="4" >4</option>
+                                                                                                                                                            <option value="5" >5</option>
+                                                                                                                                                            <option value="6" >6</option>
+                                                                                                                                                            <option value="7" >7</option>
+                                                                                                                                                            <option value="8" >8</option>
+                                                                                                                                                            <option value="9" >9</option>
+                                                                                                                                                            <option value="10" >10</option>
+                                                                                                                                                        </select>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <label>Number of Rooms</label>
+                                                                                                                                                        <br>
+                                                                                                                                                        <select class="city-menu" id="room-menu">
+                                                                                                                                                            <option value="" disabled selected>Number of rooms</option>
+                                                                                                                                                            <option value="1" >1</option>
+                                                                                                                                                            <option value="2" >2</option>
+                                                                                                                                                            <option value="3" >3</option>
+                                                                                                                                                            <option value="4" >4</option>
+                                                                                                                                                            <option value="5" >5</option>
+                                                                                                                                                            <option value="6" >6</option>
+                                                                                                                                                            <option value="7" >7</option>
+                                                                                                                                                            <option value="8" >8</option>
+                                                                                                                                                            <option value="9" >9</option>
+                                                                                                                                                            <option value="10" >10</option>
+                                                                                                                                                        </select>
+                                                                                                                                                    </div>
+                                                                                                                                                    <br>
+                                                                                                                                                </div>
+
+
+                                                                                                                                                <div class="table-group">
+
+                                                                                                                                                    <table class="center">
+
+                                                                                                                                                        <tr>
+                                                                                                                                                            <th>Room #</th>
+                                                                                                                                                            <th>Room Type</th>
+                                                                                                                                                            <th>Room Price</th>
+                                                                                                                                                            <th>Room Availability</th>
+                                                                                                                                                            <th># Of Rooms</th>
+                                                                                                                                                        </tr>
+
+                                                                                                                                                        <%for (int i = 0; i < room_type.size(); i++) {%>
+                                                                                                                                                        <tr>
+                                                                                                                                                            <td><%=room_id.get(i)%></td> 
+                                                                                                                                                            <td><%=room_type.get(i)%></td>
+                                                                                                                                                            <td>$<%=room_price.get(i)%></td>
+                                                                                                                                                            <td><%=room_availability.get(i)%></td>
+                                                                                                                                                            <td>
+                                                                                                                                                                <%if (room_availability.get(i).equals("NO")) {%>
+                                                                                                                                                                <select class="city-menu" disabled>
+                                                                                                                                                                    <option value="" disabled selected>#Rooms ------------</option>
+                                                                                                                                                                    <option value="1" >1</option>
+                                                                                                                                                                    <option value="2" >2</option>
+                                                                                                                                                                    <option value="3" >3</option>
+                                                                                                                                                                    <option value="4" >4</option>
+                                                                                                                                                                    <option value="5" >5</option>
+                                                                                                                                                                    <option value="6" >6</option>
+                                                                                                                                                                    <option value="7" >7</option>
+                                                                                                                                                                    <option value="8" >8</option>
+                                                                                                                                                                    <option value="9" >9</option>
+                                                                                                                                                                    <option value="10" >10</option>
+                                                                                                                                                                </select>
+                                                                                                                                                                <%} else {%>
+                                                                                                                                                                <select class="city-menu" onchange="checkAvilability(this,<%=i%>,<%=room_id.get(i)%>)">
+                                                                                                                                                                    <option value="" disabled selected>#Rooms ------------</option>
+                                                                                                                                                                    <option value="0" >0</option>
+                                                                                                                                                                    <option value="1" >1</option>
+                                                                                                                                                                    <option value="2" >2</option>
+                                                                                                                                                                    <option value="3" >3</option>
+                                                                                                                                                                    <option value="4" >4</option>
+                                                                                                                                                                    <option value="5" >5</option>
+                                                                                                                                                                    <option value="6" >6</option>
+                                                                                                                                                                    <option value="7" >7</option>
+                                                                                                                                                                    <option value="8" >8</option>
+                                                                                                                                                                    <option value="9" >9</option>
+                                                                                                                                                                    <option value="10" >10</option>
+                                                                                                                                                                </select>
+                                                                                                                                                                <%}%>
+                                                                                                                                                            </td>
+                                                                                                                                                        </tr>
+                                                                                                                                                        <%}%>
+                                                                                                                                                    </table>
+
+                                                                                                                                                </div>
+
+                                                                                                                                                </form>
+                                                                                                                                                <form  onsubmit="return checkOnClick()" action="makeReservation" method="Post">
+                                                                                                                                                    <input type="submit" class="btn" id="mRes" value="Apply">
+                                                                                                                                                    <input type="hidden" class="btn" id="vCheckInDate" name="checkin">
+                                                                                                                                                    <input type="hidden" class="btn" id="vCheckOutDate" name="checkout">
+                                                                                                                                                    <input type="hidden" class="btn" id="vAdults" name="adults">
+                                                                                                                                                    <input type="hidden" class="btn" id="vChildren" name="children">
+                                                                                                                                                    <input type="hidden" class="btn" id="vNumberOfRooms" name="norooms">
+                                                                                                                                                    <input type="hidden" class="btn" id="vRoomId" name="roomId">
+                                                                                                                                                    <input type="hidden" class="btn" id="vRoomNos" name="roomNo">
+                                                                                                                                                    <input type="hidden" class="btn" id="vHotelId" name="hotel_id" value='<%=hotel_id%>'>
+                                                                                                                                                    <input type="hidden" class="btn" id="vUserId" name="user_id" value='<%=u_id%>'>
+                                                                                                                                                    <input type="hidden" class="btn" id="vNights" name="noNights">
+                                                                                                                                                </form>
+
+                                                                                                                                                <form action = "addRate" method="Post">    
+                                                                                                                                                    <div class="form_group">
+                                                                                                                                                        <select class="city-menu" id="rateList" name="rateList" data-dropdown onchange="getRate()">
+                                                                                                                                                            <option value="" disabled selected>Select a rate</option>
+                                                                                                                                                            <option value="1">1</option>
+                                                                                                                                                            <option value="2">2</option>
+                                                                                                                                                            <option value="3">3</option>
+                                                                                                                                                            <option value="4">4</option>
+                                                                                                                                                            <option value="5">5</option>
+
+                                                                                                                                                        </select>
+                                                                                                                                                        <label id="listError"></label>
+                                                                                                                                                    </div>
+
+                                                                                                                                                    <div class="form-group">
+                                                                                                                                                        <input type="text" class="form-control" name="comment" placeholder="Comment" onchange="myFunction(this)">
+                                                                                                                                                    </div>
+                                                                                                                                                    <input type="submit" class="btn" value="Save">
+                                                                                                                                                    <input type="hidden" name="h_rate" class="btn" id="rate_number">
+                                                                                                                                                    <input type="hidden" name="h_hotel_id" class="btn" value='<%=hotel_id%>'>
+                                                                                                                                                    <input type="hidden" name="h_user_id" class="btn" value='<%=u_id%>'>
+                                                                                                                                                </form>
+
+                                                                                                                                                </div>
+
+                                                                                                                                                </body>
+                                                                                                                                                </html>

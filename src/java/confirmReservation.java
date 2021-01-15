@@ -88,9 +88,12 @@ public class confirmReservation extends HttpServlet {
                     + "WHERE (history_id = '"
                     + his_res_id + "');";
             int qRes = statement2.executeUpdate(query2);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("reservations.jsp");
-            dispatcher.forward(request, response);
+//
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("reservations.jsp");
+//            dispatcher.forward(request, response);
+//            
+//            
+            response.sendRedirect("reservations.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();

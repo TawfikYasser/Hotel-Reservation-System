@@ -51,35 +51,54 @@ public class addRate extends HttpServlet {
             Statement statement = null;
             connection = (Connection) DriverManager.getConnection(url, user, passworddb);
             statement = (Statement) connection.createStatement();
-            String query = "INSERT INTO rate (comment,rate,hotel_id,user_id) VALUES ("
-                    + "'" + comment + "',"
-                    + "'" + rate + "',"
-                    + "'" + Integer.valueOf(hotel_id) + "',"
-                    + "'" + Integer.valueOf(user_id) + "')";
-            int res = statement.executeUpdate(query);
-
-            Statement statement2 = null;
-            statement2 = (Statement) connection.createStatement();
-            ResultSet resultSet = null;
-            String query2 = "SELECT * FROM rate WHERE hotel_id ='" + Integer.valueOf(hotel_id) + "'";
-            resultSet = statement2.executeQuery(query2);
-
-            int avgRate = 0;
-            int counter = 0;
-            while (resultSet.next()) {
-                avgRate += Integer.valueOf(resultSet.getString("rate"));
-                counter++;
+            String q = "SELECT * FROM rate";
+            Statement statement1q = (Statement) connection.createStatement();
+            ResultSet resultSetq = null;
+            boolean flag = true;
+            resultSetq = statement1q.executeQuery(q);
+            while (resultSetq.next()) {
+                if (resultSetq.getInt("hotel_id") == Integer.valueOf(hotel_id) && resultSetq.getInt("user_id") == Integer.valueOf(user_id)) {
+                    flag = false;
+                }
             }
 
-            avgRate /= counter;
+            if (flag == true) {
+                String query = "INSERT INTO rate (comment,rate,hotel_id,user_id) VALUES ("
+                        + "'" + comment + "',"
+                        + "'" + rate + "',"
+                        + "'" + Integer.valueOf(hotel_id) + "',"
+                        + "'" + Integer.valueOf(user_id) + "')";
+                int res = statement.executeUpdate(query);
 
-            String query3 = "UPDATE hotel SET hotel_avg_rate = '" + String.valueOf(avgRate) + "' WHERE hotel_id = '" + Integer.valueOf(hotel_id) + "';";
-            Statement statement3 = null;
-            statement3 = (Statement) connection.createStatement();
-            int resQuery = statement3.executeUpdate(query3);
+                Statement statement2 = null;
+                statement2 = (Statement) connection.createStatement();
+                ResultSet resultSet = null;
+                String query2 = "SELECT * FROM rate WHERE hotel_id ='" + Integer.valueOf(hotel_id) + "'";
+                resultSet = statement2.executeQuery(query2);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("hotelProfile.jsp?hotel_id="+hotel_id);
-            dispatcher.forward(request, response);
+                int avgRate = 0;
+                int counter = 0;
+                while (resultSet.next()) {
+                    if (Integer.valueOf(resultSet.getString("rate")) != 0) {
+                        avgRate += Integer.valueOf(resultSet.getString("rate"));
+                        counter++;
+
+                    }
+
+                }
+
+                avgRate /= counter;
+
+                String query3 = "UPDATE hotel SET hotel_avg_rate = '" + String.valueOf(avgRate) + "' WHERE hotel_id = '" + Integer.valueOf(hotel_id) + "';";
+                Statement statement3 = null;
+                statement3 = (Statement) connection.createStatement();
+                int resQuery = statement3.executeUpdate(query3);
+                response.sendRedirect("hotelProfile.jsp?hotel_id=" + hotel_id+"&u_id="+user_id);
+
+            } else {
+                response.sendRedirect("hotelProfile.jsp?hotel_id=" + hotel_id+"&u_id="+user_id);
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

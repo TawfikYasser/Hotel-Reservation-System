@@ -97,8 +97,11 @@ public class cancelReservationClient extends HttpServlet {
 
             Send_Mail(clientEmail, res_id, displayname);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("reservationsClient.jsp?id=" + user_id);
-            dispatcher.forward(request, response);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("reservationsClient.jsp?id=" + user_id);
+//            dispatcher.forward(request, response);
+            request.setAttribute("id", user_id);
+            response.sendRedirect("reservationsClient.jsp");
+
         } catch (Exception e) {
             e.printStackTrace();
             out.println(e);

@@ -124,8 +124,10 @@ public class addHotel extends HttpServlet {
                 int resQuery = statement4.executeUpdate(query3);
             }
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("hotels.jsp");
-            dispatcher.forward(request, response);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("hotels.jsp");
+//            dispatcher.forward(request, response);
+//            
+            response.sendRedirect("hotels.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();

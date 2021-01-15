@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author tawfe
  */
-@WebServlet(urlPatterns = {"/cancelReservation"})
-public class cancelReservation extends HttpServlet {
+@WebServlet(urlPatterns = {"/changeReservation"})
+public class changeReservation extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,6 +39,8 @@ public class cancelReservation extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String res_id = request.getParameter("reservation_id");
+            String hotel_id = request.getParameter("hotel_id");
+            String user_id = request.getParameter("user_id");
             
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system_db?useSSL=false";
@@ -52,7 +53,7 @@ public class cancelReservation extends HttpServlet {
             ResultSet resultSet = null;
             resultSet = statement1.executeQuery("SELECT * FROM reserved_rooms");
             ArrayList<Integer> reservedRooms = new ArrayList<>();
-            
+
             while (resultSet.next()) {
                 if (resultSet.getInt("reservation_id") == Integer.valueOf(res_id)) {
                     reservedRooms.add(resultSet.getInt("reservation_id"));
@@ -63,15 +64,12 @@ public class cancelReservation extends HttpServlet {
             for (int i = 0; i < reservedRooms.size(); i++) {
                 int result2 = statement2.executeUpdate("DELETE FROM reserved_rooms WHERE (reservation_id = '" + Integer.valueOf(res_id) + "')");
             }
-            
+
             Statement statement = null;
             statement = (Statement) connection.createStatement();
             String query = "DELETE FROM reservation WHERE (reservation_id = '" + Integer.valueOf(res_id) + "')";
             int result = statement.executeUpdate(query);
-
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("reservations.jsp");
-//            dispatcher.forward(request, response);
-            response.sendRedirect("reservations.jsp");
+            response.sendRedirect("hotelProfile.jsp?hotel_id="+hotel_id+"&u_id="+user_id);
         } catch (Exception e) {
             e.printStackTrace();
             out.println(e);

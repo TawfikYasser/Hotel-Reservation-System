@@ -58,8 +58,10 @@ public class updateRoomData extends HttpServlet {
             int res = statement.executeUpdate("UPDATE room SET room_type = '" + type + "', room_price ='" + price + "', room_availability ='" + availability + "'"
                     + ", room_facility ='" + facility + "', hotel_id ='" + Integer.valueOf(hotel_id) + "' WHERE room_id ='" + Integer.valueOf(id) + "' ;");
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("rooms.jsp");
-            dispatcher.forward(request, response);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("rooms.jsp");
+//            dispatcher.forward(request, response);
+            
+            response.sendRedirect("rooms.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();

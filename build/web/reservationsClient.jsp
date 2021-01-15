@@ -129,6 +129,16 @@
                 background-color: #AF261B;
                 cursor: pointer;
             }
+            .btn-change{
+                width: 100%;       /* set to 100% */
+                height: 100%;      /* set to 100% */
+                margin-bottom: 0.5em;
+                padding-top: .6em;
+                padding-bottom: .6em;
+                color: #fff;
+                background-color: navy;
+                cursor: pointer;
+            }
             .container .filter-date-div{
                 text-align: center;
                 width: 50%;
@@ -243,6 +253,18 @@
                     <%}%>
 
                     <tr>
+                        <th style="background-color: #f3f3f3; color:#009879; ">Change</th>
+                        <td>
+                            <form action="changeReservation" method="Post">
+                                <input type="submit" class="btn-change" value="Change Reservation">
+                                <input type="hidden" class="btn"  value='<%=String.valueOf(resultSet.getInt("reservation_id"))%>' name="reservation_id">
+                                <input type="hidden" class="btn"  value='<%=String.valueOf(resultSet.getInt("hotel_id"))%>' name="hotel_id">
+                                <input type="hidden" class="btn"  value='<%=id%>' name="user_id">
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th style="background-color: #f3f3f3; color:#009879; ">Cancel</th>
                         <td>
                             <form action="cancelReservationClient" method="Post">
@@ -252,6 +274,8 @@
                             </form>
                         </td>
                     </tr>
+
+
 
                     <%}%>
                 </table>

@@ -90,12 +90,8 @@ public class makeReservation extends HttpServlet {
                 sum += (Integer.valueOf(array_no_rooms.get(i)) * Integer.valueOf(roomPrice.get(i)));
             }
             payment = String.valueOf(sum * Integer.valueOf(nights));
-            
-            
-            
+
             //Reservation Table
-            
-   
             String query1 = "INSERT INTO reservation(reservation_payment, reservation_check_in, reservation_check_out, hotel_id, user_id,status,adults,children,no_rooms) VALUES("
                     + "'" + payment + "',"
                     + "'" + checkin + "',"
@@ -106,11 +102,11 @@ public class makeReservation extends HttpServlet {
                     + "'" + adults + "',"
                     + "'" + children + "',"
                     + "'" + no_of_rooms + "')";
-            
+
             int q1Result = statement1.executeUpdate(query1);
-            
+
             int reservation_id = 0;
-            
+
             Statement statement2 = null;
             ResultSet resultSet2 = null;
             statement2 = (Statement) connection.createStatement();
@@ -128,22 +124,18 @@ public class makeReservation extends HttpServlet {
                     reservation_id = resultSet2.getInt("reservation_id");
                 }
             }
-            
-            
+
             //Reserved rooms
-            
             Statement statement3 = null;
             statement3 = (Statement) connection.createStatement();
-            for(int i =0;i<roomPrice.size();i++){
+            for (int i = 0; i < roomPrice.size(); i++) {
                 String query2 = "INSERT INTO reserved_rooms (room_id, room_price, reservation_id) VALUES ("
                         + "'" + Integer.valueOf(array_ids_rooms.get(i)) + "',"
                         + "'" + roomPrice.get(i) + "',"
                         + "'" + reservation_id + "')";
                 int res = statement3.executeUpdate(query2);
             }
-            
-            
-            
+
             //History
             statement1 = null;
             statement1 = (Statement) connection.createStatement();
@@ -157,7 +149,7 @@ public class makeReservation extends HttpServlet {
                     + "'" + adults + "',"
                     + "'" + children + "',"
                     + "'" + no_of_rooms + "')";
-            
+
             q1Result = statement1.executeUpdate(query1);
             int history_id = 0;
             statement2 = null;
@@ -177,25 +169,20 @@ public class makeReservation extends HttpServlet {
                     history_id = resultSet2.getInt("history_id");
                 }
             }
-            
+
             //Reserved history rooms
-            
-            
             statement3 = null;
             statement3 = (Statement) connection.createStatement();
-            for(int i =0;i<roomPrice.size();i++){
+            for (int i = 0; i < roomPrice.size(); i++) {
                 String query2 = "INSERT INTO reserved_history_rooms (room_id, room_price, history_id) VALUES ("
                         + "'" + Integer.valueOf(array_ids_rooms.get(i)) + "',"
                         + "'" + roomPrice.get(i) + "',"
                         + "'" + history_id + "')";
                 int res = statement3.executeUpdate(query2);
             }
-            
-            
-            
-            RequestDispatcher dispatcher = request.getRequestDispatcher("hotelProfile.jsp?hotel_id="+hotel_id);
-            dispatcher.forward(request, response);
-            
+
+            response.sendRedirect("hotelProfile.jsp?hotel_id="+hotel_id);
+
         }
     }
 

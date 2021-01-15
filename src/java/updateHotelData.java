@@ -62,9 +62,11 @@ public class updateHotelData extends HttpServlet {
                     + ", hotel_distance ='" + distance + "', hotel_phone ='" + phone + "', hotel_price_min ='" + min + "', hotel_price_max ='" + max + "', hotel_availability ='" + availability
                     + "', hotel_city ='" + city + "' WHERE hotel_id ='" + Integer.valueOf(id) + "' ;");
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("hotels.jsp");
-            dispatcher.forward(request, response);
-
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("hotels.jsp");
+//            dispatcher.forward(request, response);
+            
+            response.sendRedirect("hotels.jsp");
+            
         } catch (Exception e) {
             e.printStackTrace();
             out.print(e);

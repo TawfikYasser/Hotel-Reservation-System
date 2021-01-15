@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/signUp.html</file>
-            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/home.jsp</file>
-            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/homescript.js</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/src/java/loginValidation.java</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/rooms.jsp</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/src/java/updateRoomData.java</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/hotels.jsp</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/web/updateHotel.jsp</file>
+            <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/src/java/updateHotelData.java</file>
             <file>file:/C:/Users/tawfe/OneDrive/Documents/NetBeansProjects/HotelReservationSystemSite/src/java/signupValidation.java</file>
         </group>
     </open-files>

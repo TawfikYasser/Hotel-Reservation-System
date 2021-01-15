@@ -370,7 +370,7 @@
 
 
             <div class="filter-date-div">
-                <form onsubmit= "return checkForm(this)" action="addRoom" method="POST">  
+                <form onsubmit= "return checkForm(this)" action="addRoom" method="Post">  
 
                     <div class="form-group">
                         <input type="text" class="form-control" name="room_type" placeholder="Room Type" onchange="myFunction(this)">

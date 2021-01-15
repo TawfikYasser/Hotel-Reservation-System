@@ -116,14 +116,13 @@ public class signupValidation extends HttpServlet {
                 Send_Mail(email,String.valueOf(passwordc),diaplayname);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
+                //response.sendRedirect("index.html");
 
             } else {
                 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
                 dispatcher.forward(request, response);
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('User already exists!');");
-                out.println("</script>");
+                //response.sendRedirect("index.html");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -423,7 +423,7 @@
             <h3 style="margin: 30px;">Add Hotel</h3>
 
             <div class="filter-date-div">
-                <form  onsubmit="return checkForm(this)" action="addHotel" method="post">
+                <form  onsubmit="return checkForm(this)" action="addHotel" method="Post">
 
                     <div class="form-group">
                         <input type="text" class="form-control" name="hotel_name" placeholder="Hotel Name" onchange="myFunction(this)">
