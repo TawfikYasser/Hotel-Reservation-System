@@ -13,3 +13,7 @@ Web based Information Systems Development Course Project. -> ex: booking.com
 * MySQL
 * NetBeans IDE
 * MySQL Workbench
+
+#### Repository Contents
+* Project Files
+* DB
