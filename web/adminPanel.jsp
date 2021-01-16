@@ -118,7 +118,7 @@
             nav .logo{
                 float: left;
                 color: navy;
-                font-size: 27px;
+                font-size: 20px;
                 font-weight: 600;
                 line-height: 70px;
                 padding-left: 60px;
@@ -262,6 +262,7 @@
                 <li><a href="clients.jsp">Clients</a></li>
                 <li><a href="notification.jsp">Notification</a></li>
                 <li><a href="rates.jsp">Rates</a></li>
+                <li><a href="hotelImages.jsp">Images</a></li>
                 <li><a href="login.html" class="logout">Log Out</a></li>
             </ul>
         </nav>

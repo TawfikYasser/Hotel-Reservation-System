@@ -123,10 +123,7 @@ public class addHotel extends HttpServlet {
                 statement4 = (Statement) connection.createStatement();
                 int resQuery = statement4.executeUpdate(query3);
             }
-
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("hotels.jsp");
-//            dispatcher.forward(request, response);
-//            
+            
             response.sendRedirect("hotels.jsp");
 
         } catch (Exception e) {
