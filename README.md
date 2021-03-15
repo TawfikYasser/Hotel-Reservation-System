@@ -1,5 +1,5 @@
 # Hotel-Reservation-System
-Web based Information Systems Development Course Project. -> ex: booking.com
+Web based Information Systems Development Course Project.
 
 #### Tools
 
@@ -13,7 +13,3 @@ Web based Information Systems Development Course Project. -> ex: booking.com
 * MySQL
 * NetBeans IDE
 * MySQL Workbench
-
-#### Repository Contents
-* Project Files
-* DB
