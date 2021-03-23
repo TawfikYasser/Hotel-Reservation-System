@@ -1,5 +1,5 @@
 # Hotel-Reservation-System
-Web based Information Systems Development Course Project.
+Web Based Information Systems Development Course Project.
 
 #### Tools
 
