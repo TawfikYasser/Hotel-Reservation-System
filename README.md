@@ -1,7 +1,7 @@
 # Hotel-Reservation-System
 Web Based Information Systems Development Course Project.
 
-#### Tools
+#### Tools:
 
 * Java
 * JSP
