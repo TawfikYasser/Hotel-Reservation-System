@@ -26,7 +26,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
  *
- * @author tawfe
+ * @author tawfek
  */
 @WebServlet(urlPatterns = {"/addHotel"})
 public class addHotel extends HttpServlet {
